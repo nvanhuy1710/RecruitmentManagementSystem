@@ -8,29 +8,26 @@
 
     <changeSet id="00000000000001" author="nvhuy">
         <createTable tableName="user">
-            <column name="id" type="integer" autoIncrement="true" startWith="1050">
+            <column name="id" type="integer" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="email" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="first_name" type="varchar(255)"/>
-            <column name="last_name" type="varchar(255)"/>
+            <column name="full_name" type="varchar(255)"/>
             <column name="username" type="varchar(255)"/>
             <column name="password" type="varchar(500)"/>
-            <column name="birthday" type="datetime">
-                <constraints nullable="true"/>
-            </column>
-            <column name="level" type="varchar(255)"/>
-            <column name="avatar_url" type="varchar(256)"/>
-            <column name="role_id" type="integer"/>
+            <column name="gender" type="boolean"/>
+            <column name="birth" type="datetime"/>
+            <column name="avatar_path" type="varchar(256)"/>
             <column name="is_activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
+            <column name="role_id" type="integer"/>
         </createTable>
 
         <createTable tableName="role">
-            <column name="id" type="integer" autoIncrement="true" startWith="1050">
+            <column name="id" type="integer" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">

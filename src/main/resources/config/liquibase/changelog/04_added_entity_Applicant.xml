@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="04_added_entity_Applicant" author="nvhuy">
+        <createTable tableName="applicant">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cover_letter" type="varchar(255)"/>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resume_path" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article_id" type="integer"/>
+            <column name="user_id" type="integer"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="article_id"
+                                 baseTableName="applicant"
+                                 constraintName="fk_applicant_article"
+                                 referencedColumnNames="id"
+                                 referencedTableName="article"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="applicant"
+                                 constraintName="fk_applicant_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+    </changeSet>
+</databaseChangeLog>

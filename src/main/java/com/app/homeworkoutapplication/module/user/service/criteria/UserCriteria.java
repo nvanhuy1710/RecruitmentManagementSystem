@@ -15,13 +15,9 @@ public class UserCriteria implements Serializable {
 
     private StringFilter email;
 
-    private StringFilter firstName;
-
-    private StringFilter lastName;
+    private StringFilter fullName;
 
     private StringFilter username;
 
-    private InstantFilter birthday;
-
-    private LevelFilter level;
+    private InstantFilter birth;
 }

@@ -1,7 +1,7 @@
 package com.app.homeworkoutapplication.module.user.dto;
 
 import com.app.homeworkoutapplication.entity.enumeration.Level;
-import com.app.homeworkoutapplication.module.role.dto.Role;
+import com.app.homeworkoutapplication.module.industry.dto.Industry;
 import lombok.Data;
 
 import java.time.Instant;
@@ -32,8 +32,8 @@ public class User {
 
     private String publicAvatarUrl;
 
-    private Long roleId;
+    private Long industryId;
 
-    private Role role;
+    private Industry industry;
 }
 

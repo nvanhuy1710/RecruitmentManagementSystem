@@ -28,43 +28,47 @@ public class UserEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email
-    @Size(min = 60, max = 60)
-    @Column(name = "email", length = 60, nullable = false)
+    @Size(max = 255)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Size(max = 50)
-    @Column(name = "first_name", length = 50)
-    private String firstName;
+    @Size(max = 255)
+    @Column(name = "full_name")
+    private String fullName;
 
-    @Size(max = 50)
-    @Column(name = "last_name", length = 50)
-    private String lastName;
-
-    @NotNull
-    @Size(min = 60, max = 60)
-    @Column(name = "username", length = 60, nullable = false)
+    @Size(max = 255)
+    @Column(name = "username")
     private String username;
 
     @JsonIgnore
-    @NotNull
-    @Size(min = 60, max = 60)
-    @Column(name = "password", length = 60, nullable = false)
+    @Size(max = 500)
+    @Column(name = "password", length = 500, nullable = false)
     private String password;
 
-    @Column(name = "birthday")
-    private Instant birthday;
+    @Column(name = "gender")
+    private Boolean gender;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "level")
-    private Level level;
+    @Column(name = "birth")
+    private Instant birth;
 
-    @Column(name = "is_activated")
+    @Size(max = 256)
+    @Column(name = "avatar_path", length = 256)
+    private String avatarPath;
+
+    @NotNull
+    @Column(name = "is_activated", nullable = false)
     private Boolean isActivated;
 
-    @Column(name = "avatar_url")
-    private String avatarUrl;
-
     @ManyToOne
+    @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    @OneToMany(mappedBy = "user")
+    private Set<ArticleEntity> articles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<ApplicantEntity> applicants = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserSkillEntity> userSkills = new HashSet<>();
 }

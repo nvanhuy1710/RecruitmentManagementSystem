@@ -101,20 +101,14 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
         if (criteria.getEmail() != null) {
             specification = specification.and(buildStringSpecification(criteria.getEmail(), UserEntity_.email));
         }
-        if (criteria.getFirstName() != null) {
-            specification = specification.and(buildStringSpecification(criteria.getFirstName(), UserEntity_.firstName));
-        }
-        if (criteria.getLastName() != null) {
-            specification = specification.and(buildStringSpecification(criteria.getLastName(), UserEntity_.lastName));
+        if (criteria.getFullName() != null) {
+            specification = specification.and(buildStringSpecification(criteria.getFullName(), UserEntity_.fullName));
         }
         if (criteria.getUsername() != null) {
             specification = specification.and(buildStringSpecification(criteria.getUsername(), UserEntity_.username));
         }
-        if (criteria.getBirthday() != null) {
-            specification = specification.and(buildSpecification(criteria.getBirthday(), UserEntity_.birthday));
-        }
-        if (criteria.getLevel() != null) {
-            specification = specification.and(buildSpecification(criteria.getLevel(), UserEntity_.level));
+        if (criteria.getBirth() != null) {
+            specification = specification.and(buildSpecification(criteria.getBirth(), UserEntity_.birth));
         }
 
         return specification;

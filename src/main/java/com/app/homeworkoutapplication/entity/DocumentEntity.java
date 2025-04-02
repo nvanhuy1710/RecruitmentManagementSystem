@@ -1,0 +1,38 @@
+package com.app.homeworkoutapplication.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+
+@Data
+@Entity
+@Table(name = "document")
+@ToString
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class DocumentEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    @Size(max = 255)
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @NotNull
+    @Size(max = 255)
+    @Column(name = "file_path", nullable = false)
+    private String filePath;
+
+    @ManyToOne
+    @JoinColumn(name = "applicant_id")
+    private ApplicantEntity applicant;
+}

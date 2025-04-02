@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="03_added_list_entity_JobType" author="nvhuy">
+        <createTable tableName="industry">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+        </createTable>
+
+        <createTable tableName="job_level">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="working_model">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="industry_id"
+                                 baseTableName="article"
+                                 constraintName="fk_article_industry"
+                                 referencedColumnNames="id"
+                                 referencedTableName="industry"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_level_id"
+                                 baseTableName="article"
+                                 constraintName="fk_article_job_level"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_level"/>
+
+        <addForeignKeyConstraint baseColumnNames="working_model_id"
+                                 baseTableName="article"
+                                 constraintName="fk_article_working_model"
+                                 referencedColumnNames="id"
+                                 referencedTableName="working_model"/>
+    </changeSet>
+</databaseChangeLog>

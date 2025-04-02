@@ -18,7 +18,7 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authoritySet = new ArrayList<>();
-//        for(RoleEntity authority : user.getRoles()) {
+//        for(IndustryEntity authority : user.getIndustrys()) {
 //            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
 //            authoritySet.add(grantedAuthority);
 //        }
@@ -58,6 +58,6 @@ public class CustomUserDetail implements UserDetails {
     }
 
     public String getFullName() {
-        return userEntity.getFirstName() + " " + userEntity.getLastName();
+        return userEntity.getFullName();
     }
 }

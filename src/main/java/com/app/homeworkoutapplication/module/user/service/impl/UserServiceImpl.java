@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
             existUser.setLastName(user.getLastName());
             existUser.setBirthday(user.getBirthday());
             existUser.setLevel(user.getLevel());
-            existUser.setRoleId(user.getRoleId());
+            existUser.setIndustryId(user.getIndustryId());
             if(user.getAvatarUrl() != null) {
                 existUser.setAvatarUrl(user.getAvatarUrl());
             }

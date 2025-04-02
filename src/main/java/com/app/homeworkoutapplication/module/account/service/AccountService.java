@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface AccountService {
 
-    User register(RegisterRequest registerRequest, String roles);
+    User register(RegisterRequest registerRequest, String industrys);
 
     void activateUser(String email);
 

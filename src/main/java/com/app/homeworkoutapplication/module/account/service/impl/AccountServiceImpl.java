@@ -5,7 +5,7 @@ import com.app.homeworkoutapplication.module.account.dto.RegisterRequest;
 import com.app.homeworkoutapplication.module.account.service.AccountService;
 import com.app.homeworkoutapplication.module.blobstorage.service.BlobStorageService;
 import com.app.homeworkoutapplication.module.mail.service.MailService;
-import com.app.homeworkoutapplication.module.role.service.QueryRoleService;
+import com.app.homeworkoutapplication.module.industry.service.QueryIndustryService;
 import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.module.user.service.UserService;
@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final UserMapper userMapper;
 
-    private final QueryRoleService queryRoleService;
+    private final QueryIndustryService queryIndustryService;
 
     private final BlobStorageService blobStorageService;
 
@@ -45,11 +45,11 @@ public class AccountServiceImpl implements AccountService {
 
     private final QueryUserService queryUserService;
 
-    public AccountServiceImpl(MailService mailService, PasswordEncoder passwordEncoder, UserMapper userMapper, QueryRoleService queryRoleService, BlobStorageService blobStorageService, CurrentUserUtil currentUserUtil, UserService userService, QueryUserService queryUserService) {
+    public AccountServiceImpl(MailService mailService, PasswordEncoder passwordEncoder, UserMapper userMapper, QueryIndustryService queryIndustryService, BlobStorageService blobStorageService, CurrentUserUtil currentUserUtil, UserService userService, QueryUserService queryUserService) {
         this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
-        this.queryRoleService = queryRoleService;
+        this.queryIndustryService = queryIndustryService;
         this.blobStorageService = blobStorageService;
         this.currentUserUtil = currentUserUtil;
         this.userService = userService;
@@ -57,14 +57,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public User register(RegisterRequest registerRequest, String roles) {
+    public User register(RegisterRequest registerRequest, String industrys) {
 
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
 
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(encodedPassword);
-        newUser.setRoleId(queryRoleService.getByName(roles).getId());
+        newUser.setIndustryId(queryIndustryService.getByName(industrys).getId());
         newUser.setEmail(registerRequest.getEmail());
         newUser.setIsActivated(false);
         newUser = userService.save(newUser);
