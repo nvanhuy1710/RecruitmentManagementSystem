@@ -9,5 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface ApplicantRepository extends JpaRepository<ApplicantEntity, Long>, JpaSpecificationExecutor<ApplicantEntity> {
-    Optional<ApplicantEntity> findByEmail(String email);
 }
