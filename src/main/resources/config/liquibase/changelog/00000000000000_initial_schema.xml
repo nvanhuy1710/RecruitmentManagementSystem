@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="00000000000001" author="nvhuy">
+        <createTable tableName="user">
+            <column name="id" type="integer" autoIncrement="true" startWith="1050">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="first_name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="username" type="varchar(255)"/>
+            <column name="password" type="varchar(500)"/>
+            <column name="birthday" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+            <column name="level" type="varchar(255)"/>
+            <column name="avatar_url" type="varchar(256)"/>
+            <column name="role_id" type="integer"/>
+            <column name="is_activated" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="role">
+            <column name="id" type="integer" autoIncrement="true" startWith="1050">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user"
+                                 constraintName="fk_user_role"
+                                 referencedColumnNames="id"
+                                 referencedTableName="role"/>
+
+        <insert tableName="role">
+            <column name="name" value="ADMIN"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="USER"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

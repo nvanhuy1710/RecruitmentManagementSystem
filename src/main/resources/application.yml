@@ -1,0 +1,59 @@
+spring:
+  web:
+    cors:
+      allowed-origins: "/**"
+      allowed-methods: "GET, POST, PUT, DELETE"
+      allowed-headers: "*"
+      allow-credentials: true
+      max-age: 3600
+  application:
+    name: homeworkoutapplication
+  datasource:
+    url: jdbc:mysql://localhost:3306/recruitment_system?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    username: root
+    password: nvanhuy1710
+  liquibase:
+    change-log: classpath:config/liquibase/master.xml
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: nvanhuy13257@gmail.com
+    password: simi mfiz qkol kirk
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          jobStore:
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+springdoc:
+  show-actuator: true
+  api-docs:
+    path: /authentication-service/v3/api-docs
+app:
+  activation:
+    url: https://homeworkout.up.railway.app/api/activate
+  firebase-configuration-file: homeworkoutapplication-a9904-firebase-adminsdk-ru9rz-685a83ba9f.json
+
+storage:
+  account-name: homeworkoutapplication1
+  account-key: klJYbueLzpOpyUkQMRwCYPMZZI1SsREy/iEOptfXW5wgzngQUL6bv4ZXHLtGTQY3v3KVPCyF65AZ+ASt84AdyA==
+  endpoint: https://homeworkoutapplication1.blob.core.windows.net/
+  container: homeworkoutapplication
