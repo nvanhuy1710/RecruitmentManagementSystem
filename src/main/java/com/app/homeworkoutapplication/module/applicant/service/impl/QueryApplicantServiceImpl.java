@@ -70,7 +70,7 @@ public class QueryApplicantServiceImpl extends QueryService<ApplicantEntity> imp
             specification = specification.and(buildStringSpecification(criteria.getPhone(), ApplicantEntity_.phone));
         }
         if (criteria.getStatus() != null) {
-            specification = specification.and(buildStringSpecification(criteria.getStatus(), ApplicantEntity_.status));
+            specification = specification.and(buildSpecification(criteria.getStatus(), ApplicantEntity_.status));
         }
 
         return specification;

@@ -1,5 +1,6 @@
 package com.app.homeworkoutapplication.entity;
 
+import com.app.homeworkoutapplication.entity.enumeration.ArticleStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -58,7 +59,8 @@ public class ArticleEntity implements Serializable {
     @NotNull
     @Size(max = 255)
     @Column(name = "status", nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ArticleStatus status;
 
     @ManyToOne
     @JoinColumn(name = "industry_id")

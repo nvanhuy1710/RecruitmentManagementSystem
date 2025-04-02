@@ -22,7 +22,7 @@ public class CustomUserDetail implements UserDetails {
 //            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
 //            authoritySet.add(grantedAuthority);
 //        }
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(userEntity.getRole().getName());
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(userEntity.getArticle().getName());
         authoritySet.add(grantedAuthority);
         return authoritySet;
     }
