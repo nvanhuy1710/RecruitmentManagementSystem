@@ -1,8 +1,10 @@
 package com.app.homeworkoutapplication.module.article.service.impl;
 
+import com.app.homeworkoutapplication.entity.enumeration.ArticleStatus;
 import com.app.homeworkoutapplication.entity.mapper.ArticleMapper;
 import com.app.homeworkoutapplication.module.article.dto.Article;
 import com.app.homeworkoutapplication.module.article.service.ArticleService;
+import com.app.homeworkoutapplication.module.article.service.QueryArticleService;
 import com.app.homeworkoutapplication.repository.ArticleRepository;
 import com.app.homeworkoutapplication.web.rest.error.exception.BadRequestException;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
 
+    private final QueryArticleService queryArticleService;
+
     private final ArticleMapper articleMapper;
 
-    public ArticleServiceImpl(ArticleRepository articleRepository, ArticleMapper articleMapper) {
+    public ArticleServiceImpl(ArticleRepository articleRepository, QueryArticleService queryArticleService, ArticleMapper articleMapper) {
         this.articleRepository = articleRepository;
+        this.queryArticleService = queryArticleService;
         this.articleMapper = articleMapper;
     }
 
@@ -30,6 +35,18 @@ public class ArticleServiceImpl implements ArticleService {
         if (article.getId() == null) {
             throw new BadRequestException("id null!");
         }
+        return articleMapper.toDto(articleRepository.save(articleMapper.toEntity(article)));
+    }
+
+    public Article approve(Long id) {
+        Article article = queryArticleService.getById(id);
+        article.setStatus(ArticleStatus.APPROVED);
+        return articleMapper.toDto(articleRepository.save(articleMapper.toEntity(article)));
+    }
+
+    public Article reject(Long id) {
+        Article article = queryArticleService.getById(id);
+        article.setStatus(ArticleStatus.REJECTED);
         return articleMapper.toDto(articleRepository.save(articleMapper.toEntity(article)));
     }
 

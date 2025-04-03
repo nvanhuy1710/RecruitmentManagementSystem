@@ -1,6 +1,9 @@
 package com.app.homeworkoutapplication.module.applicant.dto;
 
+import com.app.homeworkoutapplication.module.document.dto.Document;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class Applicant {

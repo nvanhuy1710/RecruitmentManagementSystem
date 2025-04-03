@@ -11,5 +11,7 @@ public class Document {
 
     private String filePath;
 
+    private Long applicantId;
+
     private Applicant applicant;
 }

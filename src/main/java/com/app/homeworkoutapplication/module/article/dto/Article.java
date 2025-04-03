@@ -1,5 +1,6 @@
 package com.app.homeworkoutapplication.module.article.dto;
 
+import com.app.homeworkoutapplication.entity.enumeration.ArticleStatus;
 import lombok.Data;
 
 import java.time.Instant;
@@ -15,7 +16,7 @@ public class Article {
     private String companyWebsiteUrl;
     private Integer salary;
     private Instant dueDate;
-    private String status;
+    private ArticleStatus status;
     private Long industryId;
     private Long jobLevelId;
     private Long workingModelId;

@@ -68,6 +68,20 @@ public class ArticleController {
         return ResponseEntity.ok(res);
     }
 
+    @PutMapping("/articles/{id}/approve")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<Void> approve(@PathVariable("id") Long id){
+        articleService.approve(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/articles/{id}/reject")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<Void> reject(@PathVariable("id") Long id){
+        articleService.reject(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/articles/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         articleService.delete(id);

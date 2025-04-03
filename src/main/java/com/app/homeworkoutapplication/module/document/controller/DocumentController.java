@@ -36,19 +36,6 @@ public class DocumentController {
         this.queryDocumentService = queryDocumentService;
     }
 
-    @PostMapping("/documents")
-    public ResponseEntity<Document> create(@Valid @RequestBody Document document) throws URISyntaxException {
-        Document result = documentService.create(document);
-        return ResponseEntity.created(new URI("/api/documents/" + result.getId())).body(result);
-    }
-
-    @PutMapping("/documents/{id}")
-    public ResponseEntity<Document> update(@PathVariable("id") Long id, @Valid @RequestBody Document document){
-        if (document.getId() == null) document.setId(id);
-        Document res = documentService.update(document);
-        return ResponseEntity.ok(res);
-    }
-
     @GetMapping("/documents")
     public ResponseEntity<List<Document>> getDocumentPages(@ParameterObject DocumentCriteria criteria, @ParameterObject Pageable pageable) {
         Page<Document> page = queryDocumentService.findPageByCriteria(criteria, pageable);
