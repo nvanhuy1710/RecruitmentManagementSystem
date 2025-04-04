@@ -115,8 +115,8 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
     }
 
     private void getPublicUrl(User user) {
-        if(user.getAvatarUrl() != null) {
-            user.setPublicAvatarUrl(blobStorageService.getUrl(user.getAvatarUrl()));
+        if(user.getAvatarPath() != null) {
+            user.setAvatarUrl(blobStorageService.getUrl(user.getAvatarPath()));
         }
     }
 }

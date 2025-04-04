@@ -53,7 +53,7 @@ app:
   firebase-configuration-file: homeworkoutapplication-a9904-firebase-adminsdk-ru9rz-685a83ba9f.json
 
 storage:
-  account-name: homeworkoutapplication1
-  account-key: klJYbueLzpOpyUkQMRwCYPMZZI1SsREy/iEOptfXW5wgzngQUL6bv4ZXHLtGTQY3v3KVPCyF65AZ+ASt84AdyA==
-  endpoint: https://homeworkoutapplication1.blob.core.windows.net/
-  container: homeworkoutapplication
+  account-name: recruitmentmanagement
+  account-key: ScqNb+AW+B9JZ93Y/IhMQz76p3wren1untcbhIpmUMSAlc84W3l4UirFjG0a4PRPHwbbf6GVUa9Z+AStGURsFA==
+  endpoint: https://recruitmentmanagement.blob.core.windows.net/
+  container: recruitmentstorage

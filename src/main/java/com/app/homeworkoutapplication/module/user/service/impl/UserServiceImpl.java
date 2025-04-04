@@ -37,14 +37,9 @@ public class UserServiceImpl implements UserService {
 
             User existUser = queryUserService.findById(user.getId());
             existUser.setEmail(user.getEmail());
-            existUser.setFirstName(user.getFirstName());
-            existUser.setLastName(user.getLastName());
-            existUser.setBirthday(user.getBirthday());
-            existUser.setLevel(user.getLevel());
-            existUser.setIndustryId(user.getIndustryId());
-            if(user.getAvatarUrl() != null) {
-                existUser.setAvatarUrl(user.getAvatarUrl());
-            }
+            existUser.setFullName(user.getFullName());
+            existUser.setBirth(user.getBirth());
+            existUser.setGender(user.getGender());
             return userMapper.toDto(userRepository.save(userMapper.toEntity(existUser)));
         }
         else {
@@ -56,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     public void updateAvatar(Long userId, String avatarPath) {
         User existUser = queryUserService.findById(userId);
-        existUser.setAvatarUrl(avatarPath);
+        existUser.setAvatarPath(avatarPath);
         userRepository.save(userMapper.toEntity(existUser));
     }
 

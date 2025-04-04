@@ -66,8 +66,10 @@ public class AuthController {
 
         if (jwtUtil.isTokenValid(refreshToken, username)) {
             String newAccessToken = jwtUtil.createToken(username, false);
+            String newRefreshToken = jwtUtil.createToken(username, true);
             Map<String, String> tokens = new HashMap<>();
             tokens.put("accessToken", newAccessToken);
+            tokens.put("refreshToken", newRefreshToken);
             return ResponseEntity.ok(tokens);
         } else {
             return ResponseEntity.status(403).body("Invalid refresh token or expired.");

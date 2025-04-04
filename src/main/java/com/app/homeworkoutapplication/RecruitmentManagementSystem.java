@@ -7,16 +7,16 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication
-public class HomeworkoutapplicationApplication {
+public class RecruitmentManagementSystem {
 
 	private final Environment env;
 
-	public HomeworkoutapplicationApplication(Environment env) {
+	public RecruitmentManagementSystem(Environment env) {
 		this.env = env;
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(HomeworkoutapplicationApplication.class, args);
+		SpringApplication.run(RecruitmentManagementSystem.class, args);
 	}
 
 	@EventListener(ApplicationReadyEvent.class)

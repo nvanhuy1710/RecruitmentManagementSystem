@@ -12,5 +12,6 @@ public interface UserMapper extends EntityMapper<User, UserEntity> {
     UserEntity toEntity(User user);
 
     @Mapping(target = "roleId", source = "role.id")
+    @Mapping(target = "role", ignore = true)
     User toDto(UserEntity user);
 }

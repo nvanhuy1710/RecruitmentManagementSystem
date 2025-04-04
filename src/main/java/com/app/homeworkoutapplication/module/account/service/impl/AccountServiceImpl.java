@@ -9,6 +9,7 @@ import com.app.homeworkoutapplication.module.industry.service.QueryIndustryServi
 import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.module.user.service.UserService;
+import com.app.homeworkoutapplication.util.BlobStoragePathUtil;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,8 +28,6 @@ public class AccountServiceImpl implements AccountService {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=<>?";
     private static final int PASSWORD_LENGTH = 9;
 
-    private String AVATAR_PATH = "homeworkoutapplication/user/{id}/avatar/";
-
     private final MailService mailService;
 
     private final PasswordEncoder passwordEncoder;
@@ -45,7 +44,9 @@ public class AccountServiceImpl implements AccountService {
 
     private final QueryUserService queryUserService;
 
-    public AccountServiceImpl(MailService mailService, PasswordEncoder passwordEncoder, UserMapper userMapper, QueryIndustryService queryIndustryService, BlobStorageService blobStorageService, CurrentUserUtil currentUserUtil, UserService userService, QueryUserService queryUserService) {
+    private final BlobStoragePathUtil blobStoragePathUtil;
+
+    public AccountServiceImpl(MailService mailService, PasswordEncoder passwordEncoder, UserMapper userMapper, QueryIndustryService queryIndustryService, BlobStorageService blobStorageService, CurrentUserUtil currentUserUtil, UserService userService, QueryUserService queryUserService, BlobStoragePathUtil blobStoragePathUtil) {
         this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
@@ -54,6 +55,7 @@ public class AccountServiceImpl implements AccountService {
         this.currentUserUtil = currentUserUtil;
         this.userService = userService;
         this.queryUserService = queryUserService;
+        this.blobStoragePathUtil = blobStoragePathUtil;
     }
 
     @Override
@@ -64,7 +66,6 @@ public class AccountServiceImpl implements AccountService {
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(encodedPassword);
-        newUser.setIndustryId(queryIndustryService.getByName(industrys).getId());
         newUser.setEmail(registerRequest.getEmail());
         newUser.setIsActivated(false);
         newUser = userService.save(newUser);
@@ -93,9 +94,7 @@ public class AccountServiceImpl implements AccountService {
     public void updateAvatar(MultipartFile file) {
         User userOptional = queryUserService.findById(currentUserUtil.getCurrentUser().getId());
         if (userOptional != null) {
-            Map<String, String> values = new HashMap<>();
-            values.put("id", userOptional.getId().toString());
-            String path = StringSubstitutor.replace(AVATAR_PATH, values, "{", "}") + file.getOriginalFilename();
+            String path = blobStoragePathUtil.getAvatarPath(userOptional.getId(), file.getOriginalFilename());
             blobStorageService.save(file, path);
             userService.updateAvatar(userOptional.getId(), path);
         }

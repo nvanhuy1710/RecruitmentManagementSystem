@@ -2,6 +2,7 @@ package com.app.homeworkoutapplication.module.user.dto;
 
 import com.app.homeworkoutapplication.entity.enumeration.Level;
 import com.app.homeworkoutapplication.module.industry.dto.Industry;
+import com.app.homeworkoutapplication.module.role.dto.Role;
 import lombok.Data;
 
 import java.time.Instant;
@@ -14,26 +15,24 @@ public class User {
 
     private String email;
 
-    private String firstName;
-
-    private String lastName;
+    private String fullName;
 
     private String username;
 
     private String password;
 
-    private Instant birthday;
+    private Instant birth;
 
-    private Level level;
+    private Boolean gender;
 
     private Boolean isActivated;
 
+    private String avatarPath;
+
     private String avatarUrl;
 
-    private String publicAvatarUrl;
+    private Long roleId;
 
-    private Long industryId;
-
-    private Industry industry;
+    private Role role;
 }
 

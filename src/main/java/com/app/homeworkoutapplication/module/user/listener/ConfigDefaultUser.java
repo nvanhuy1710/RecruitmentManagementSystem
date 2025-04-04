@@ -1,9 +1,11 @@
 package com.app.homeworkoutapplication.module.user.listener;
 
 import com.app.homeworkoutapplication.entity.IndustryEntity;
+import com.app.homeworkoutapplication.entity.RoleEntity;
 import com.app.homeworkoutapplication.entity.UserEntity;
 import com.app.homeworkoutapplication.entity.mapper.UserMapper;
 import com.app.homeworkoutapplication.module.industry.service.QueryIndustryService;
+import com.app.homeworkoutapplication.module.role.service.QueryRoleService;
 import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.repository.UserRepository;
 import com.app.homeworkoutapplication.web.rest.error.exception.NotFoundException;
@@ -19,37 +21,37 @@ public class ConfigDefaultUser {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final QueryIndustryService queryIndustryService;
+    private final QueryRoleService queryRoleService;
 
     private final UserMapper userMapper;
 
     private final UserRepository userRepository;
 
-    public ConfigDefaultUser(QueryUserService queryUserService, PasswordEncoder passwordEncoder, QueryIndustryService queryIndustryService, UserMapper userMapper, UserRepository userRepository) {
+    public ConfigDefaultUser(QueryUserService queryUserService, PasswordEncoder passwordEncoder, QueryRoleService queryRoleService, UserMapper userMapper, UserRepository userRepository) {
         this.queryUserService = queryUserService;
         this.passwordEncoder = passwordEncoder;
-        this.queryIndustryService = queryIndustryService;
+        this.queryRoleService = queryRoleService;
         this.userMapper = userMapper;
         this.userRepository = userRepository;
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void CreateDefaultUser() {
-//        try {
-//            queryUserService.getByUsername("Admin");
-//        } catch (NotFoundException e) {
-//
-//            String encodedPassword = passwordEncoder.encode("Admin123@");
-//
-//            UserEntity newUser = new UserEntity();
-//            newUser.setUsername("Admin");
-//            newUser.setPassword(encodedPassword);
-//            IndustryEntity industryEntity = new IndustryEntity();
-//            industryEntity.setId(queryIndustryService.getByName("ADMIN").getId());
-//            newUser.setIndustry(industryEntity);
-//            newUser.setEmail("admin@gmail.com");
-//            newUser.setIsActivated(true);
-//            userRepository.save(newUser);
-//        }
+    public void createDefaultUser() {
+        try {
+            queryUserService.getByUsername("admin");
+        } catch (NotFoundException e) {
+
+            String encodedPassword = passwordEncoder.encode("Admin123@");
+
+            UserEntity newUser = new UserEntity();
+            newUser.setUsername("admin");
+            newUser.setPassword(encodedPassword);
+            RoleEntity roleEntity = new RoleEntity();
+            roleEntity.setId(queryRoleService.getByName("ADMIN").getId());
+            newUser.setRole(roleEntity);
+            newUser.setEmail("admin@gmail.com");
+            newUser.setIsActivated(true);
+            userRepository.save(newUser);
+        }
     }
 }
