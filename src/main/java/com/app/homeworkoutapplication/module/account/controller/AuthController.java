@@ -46,20 +46,6 @@ public class AuthController {
                                       HttpServletRequest request,
                                       HttpServletResponse response) {
         try {
-//            Authentication authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
-//
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            String accessToken = jwtUtil.createToken(loginDTO.getUsername(), false);
-//            String refreshToken = jwtUtil.createToken(loginDTO.getUsername(), true);
-//
-//            Map<String, Object> tokens = new HashMap<>();
-//            tokens.put("accessToken", accessToken);
-//            tokens.put("refreshToken", refreshToken);
-//            tokens.put("expiredIn", jwtUtil.getAccessTokenExpired());
-//
-//            return ResponseEntity.ok(tokens);
 
             UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
                     .unauthenticated(
@@ -68,10 +54,10 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContext context = securityContextHolderStrategy.createEmptyContext();
 
-            context.setAuthentication(authentication); //set context application from authentication
+            context.setAuthentication(authentication);
             securityContextHolderStrategy.setContext(context);
 
-            securityContextRepository.saveContext(context, request, response); //save the auth context
+            securityContextRepository.saveContext(context, request, response);
         } catch (AuthenticationException e) {
             return ResponseEntity.noContent().build();
         }
