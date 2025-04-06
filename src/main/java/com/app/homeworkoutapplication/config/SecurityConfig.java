@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,10 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -45,30 +50,52 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
         http
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/**").permitAll()
-//                        .requestMatchers("/api/public/**").permitAll()
-//                        .requestMatchers("/api/auth/login", "/api/auth/refresh-token").permitAll()
-//                        .requestMatchers("/api/register").permitAll()
-//                        .requestMatchers("/api/activate").permitAll()
-//                        .requestMatchers("/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/authentication-service/**").permitAll() // Cho phép truy cập Swagger
-//                        .requestMatchers("/api/**").permitAll()
-//                        .requestMatchers("/public/api/**").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/refresh-token").permitAll()
+                        .requestMatchers("/api/register").permitAll()
+                        .requestMatchers("/api/activate").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/authentication-service/**").permitAll() // Cho phép truy cập Swagger
+                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/public/api/**").permitAll()
+//                        .requestMatchers("/**").authenticated()
                 )
                 .exceptionHandling(exceptions ->
                     exceptions
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                )            .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .logout(LogoutConfigurer::permitAll);
+                )
+                .httpBasic(Customizer.withDefaults());
 
+        http.sessionManagement((session) -> {
+                session.maximumSessions(1).maxSessionsPreventsLogin(true);
+                session.sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession);
+                session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+            }
+        );
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.securityContext((context) -> context.securityContextRepository(securityContextRepository));
+
+        http.logout((logout) -> {
+                    logout.logoutUrl("/api/auth/logout");
+                    logout.addLogoutHandler(
+                        new HeaderWriterLogoutHandler(
+                            new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.COOKIES)
+                        )
+                    );
+                    logout.deleteCookies("JSESSIONID");
+                }
+        );
 
         return http.build();
+    }
+
+    @Bean
+    public SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
     }
 
     @Bean

@@ -1,5 +1,6 @@
 package com.app.homeworkoutapplication.module.user.dto;
 
+import com.app.homeworkoutapplication.entity.RoleEntity;
 import com.app.homeworkoutapplication.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +19,7 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authoritySet = new ArrayList<>();
-//        for(IndustryEntity authority : user.getIndustrys()) {
+//        for(RoleEntity authority : userEntity.getRole()) {
 //            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
 //            authoritySet.add(grantedAuthority);
 //        }

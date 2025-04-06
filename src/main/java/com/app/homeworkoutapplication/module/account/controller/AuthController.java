@@ -3,16 +3,21 @@ package com.app.homeworkoutapplication.module.account.controller;
 import com.app.homeworkoutapplication.module.account.dto.LoginDTO;
 import com.app.homeworkoutapplication.module.account.dto.TokenRefreshRequest;
 import com.app.homeworkoutapplication.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +31,10 @@ public class AuthController {
 
     private final UserDetailsService userDetailsService;
 
+    private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
+
+    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+
     public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
@@ -33,25 +42,40 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<Void> login(@RequestBody LoginDTO loginDTO,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+//
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//            String accessToken = jwtUtil.createToken(loginDTO.getUsername(), false);
+//            String refreshToken = jwtUtil.createToken(loginDTO.getUsername(), true);
+//
+//            Map<String, Object> tokens = new HashMap<>();
+//            tokens.put("accessToken", accessToken);
+//            tokens.put("refreshToken", refreshToken);
+//            tokens.put("expiredIn", jwtUtil.getAccessTokenExpired());
+//
+//            return ResponseEntity.ok(tokens);
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UsernamePasswordAuthenticationToken token = UsernamePasswordAuthenticationToken
+                    .unauthenticated(
+                            loginDTO.getUsername(), loginDTO.getPassword()
+                    );
+            Authentication authentication = authenticationManager.authenticate(token);
+            SecurityContext context = securityContextHolderStrategy.createEmptyContext();
 
-            String accessToken = jwtUtil.createToken(loginDTO.getUsername(), false);
-            String refreshToken = jwtUtil.createToken(loginDTO.getUsername(), true);
+            context.setAuthentication(authentication); //set context application from authentication
+            securityContextHolderStrategy.setContext(context);
 
-            Map<String, Object> tokens = new HashMap<>();
-            tokens.put("accessToken", accessToken);
-            tokens.put("refreshToken", refreshToken);
-            tokens.put("expiredIn", jwtUtil.getAccessTokenExpired());
-
-            return ResponseEntity.ok(tokens);
+            securityContextRepository.saveContext(context, request, response); //save the auth context
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Login failed: " + e.getMessage());
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/logout")
