@@ -14,4 +14,6 @@ public class Document {
     private Long applicantId;
 
     private Applicant applicant;
+
+    private String fileUrl;
 }

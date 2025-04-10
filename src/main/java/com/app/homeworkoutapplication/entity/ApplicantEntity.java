@@ -5,10 +5,15 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -43,16 +48,22 @@ public class ApplicantEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private ApplicantStatus status;
 
-    @NotNull
-    @Size(max = 255)
-    @Column(name = "resume_path", nullable = false)
-    private String resumePath;
-
     @ManyToOne
     @JoinColumn(name = "article_id")
     private ArticleEntity article;
 
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    private Instant createdDate = Instant.now();
+
+    @LastModifiedDate
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate = Instant.now();
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @OneToMany(mappedBy = "applicant")
+    private Set<DocumentEntity> documents = new HashSet<>();
 }

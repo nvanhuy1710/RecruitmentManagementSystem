@@ -59,8 +59,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/activate").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/authentication-service/**").permitAll() // Cho phép truy cập Swagger
-                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/public/api/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
 //                        .requestMatchers("/**").authenticated()
                 )
                 .exceptionHandling(exceptions ->

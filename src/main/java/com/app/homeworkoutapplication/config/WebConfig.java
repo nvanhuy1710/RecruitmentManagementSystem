@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true)
-                .exposedHeaders()
+                .exposedHeaders("X-Total-Count")
                 .maxAge(36);
     }
 }

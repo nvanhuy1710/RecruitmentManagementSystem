@@ -37,6 +37,11 @@ public class ArticleEntity implements Serializable {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Lob
+    @NotNull
+    @Column(name = "requirement", nullable = false)
+    private String requirement;
+
     @Size(max = 255)
     @Column(name = "address")
     private String address;
@@ -45,12 +50,15 @@ public class ArticleEntity implements Serializable {
     @Column(name = "location")
     private String location;
 
-    @Size(max = 255)
-    @Column(name = "company_website_url")
-    private String companyWebsiteUrl;
+    @Size(max = 500)
+    @Column(name = "company")
+    private String company;
 
-    @Column(name = "salary")
-    private Integer salary;
+    @Column(name = "from_salary")
+    private Long fromSalary;
+
+    @Column(name = "to_salary")
+    private Long toSalary;
 
     @NotNull
     @Column(name = "due_date", nullable = false)

@@ -33,6 +33,8 @@ public class User {
 
     private Long roleId;
 
+    private String roleName;
+
     private Role role;
 }
 

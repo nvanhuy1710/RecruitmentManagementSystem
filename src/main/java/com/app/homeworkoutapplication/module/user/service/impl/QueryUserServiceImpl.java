@@ -2,6 +2,7 @@ package com.app.homeworkoutapplication.module.user.service.impl;
 
 import com.app.homeworkoutapplication.entity.UserEntity;
 import com.app.homeworkoutapplication.entity.UserEntity_;
+import com.app.homeworkoutapplication.entity.mapper.RoleMapper;
 import com.app.homeworkoutapplication.entity.mapper.UserMapper;
 import com.app.homeworkoutapplication.module.blobstorage.service.BlobStorageService;
 import com.app.homeworkoutapplication.module.user.dto.User;
@@ -30,16 +31,19 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
 
     private final UserMapper userMapper;
 
-    public QueryUserServiceImpl(UserRepository userRepository, BlobStorageService blobStorageService, UserMapper userMapper) {
+    private final RoleMapper roleMapper;
+
+    public QueryUserServiceImpl(UserRepository userRepository, BlobStorageService blobStorageService, UserMapper userMapper, RoleMapper roleMapper) {
         this.userRepository = userRepository;
         this.blobStorageService = blobStorageService;
         this.userMapper = userMapper;
+        this.roleMapper = roleMapper;
     }
 
     public List<User> findListByCriteria(UserCriteria criteria) {
         return userRepository.findAll(createSpecification(criteria)).stream().map(userEntity -> {
             User user = userMapper.toDto(userEntity);
-            getPublicUrl(user);
+            fetchData(userEntity, user);
             return user;
         }).toList();
     }
@@ -53,7 +57,7 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
         return new PageImpl<>(
             page.getContent().stream().map(userEntity -> {
                 User user = userMapper.toDto(userEntity);
-                getPublicUrl(user);
+                fetchData(userEntity, user);
                 return user;
             }).toList(),
             pageable,
@@ -67,7 +71,7 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
             throw new NotFoundException("Not found user by id " + id);
         }
         User user = userMapper.toDto(userEntity.get());
-        getPublicUrl(user);
+        fetchData(userEntity.get(), user);
         return user;
     }
 
@@ -77,7 +81,7 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
             throw new NotFoundException("Not found user by username: " + username);
         }
         User user = userMapper.toDto(userEntity.get());
-        getPublicUrl(user);
+        fetchData(userEntity.get(), user);
         return user;
     }
 
@@ -87,7 +91,7 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
             throw new NotFoundException("Not found user by email: " + email);
         }
         User user = userMapper.toDto(userEntity.get());
-        getPublicUrl(user);
+        fetchData(userEntity.get(), user);
         return user;
     }
 
@@ -114,9 +118,10 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
         return specification;
     }
 
-    private void getPublicUrl(User user) {
+    private void fetchData(UserEntity entity, User user) {
         if(user.getAvatarPath() != null) {
             user.setAvatarUrl(blobStorageService.getUrl(user.getAvatarPath()));
         }
+        user.setRoleName(entity.getRole().getName());
     }
 }

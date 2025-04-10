@@ -13,6 +13,8 @@ public interface QueryDocumentService {
 
     Page<Document> findPageByCriteria(DocumentCriteria criteria, Pageable pageable);
 
+    List<Document> findByApplicantId(Long id);
+
     Document getById(Long id);
 
     Document getByName(String name);

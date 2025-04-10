@@ -18,4 +18,10 @@
     <include file="config/liquibase/changelog/05_added_entity_Document.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/06_added_entity_Skill.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/07_added_QuartJob.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/08_inserted_data_industry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/09_inserted_data_JobLevel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/10_inserted_data_WorkingModel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/11_added_column_Article.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/12_drop_column_Applicant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/13_added_column_Applicant.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

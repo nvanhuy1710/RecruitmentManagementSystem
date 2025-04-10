@@ -1,5 +1,6 @@
 package com.app.homeworkoutapplication.module.applicant.service.impl;
 
+import com.app.homeworkoutapplication.entity.enumeration.ApplicantStatus;
 import com.app.homeworkoutapplication.entity.mapper.ApplicantMapper;
 import com.app.homeworkoutapplication.module.applicant.dto.Applicant;
 import com.app.homeworkoutapplication.module.applicant.service.ApplicantService;
@@ -11,11 +12,13 @@ import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import com.app.homeworkoutapplication.web.rest.error.exception.BadRequestException;
 import jakarta.mail.Multipart;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ApplicantServiceImpl implements ApplicantService {
 
     private final ApplicantRepository applicantRepository;
@@ -40,12 +43,13 @@ public class ApplicantServiceImpl implements ApplicantService {
         }
 
         applicant.setUserId(currentUserUtil.getCurrentUser().getId());
+        applicant.setStatus(ApplicantStatus.SUBMITTED);
 
         Applicant result = applicantMapper.toDto(applicantRepository.save(applicantMapper.toEntity(applicant)));
 
         for(MultipartFile file : files) {
             Document document = new Document();
-            document.setName(file.getName());
+            document.setName(file.getOriginalFilename());
             document.setApplicantId(result.getId());
             documentService.create(document, file);
         }

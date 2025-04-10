@@ -36,14 +36,14 @@ public class UserSkillController {
         this.queryUserSkillService = queryUserSkillService;
     }
 
-    @PostMapping("/user_skills")
+    @PostMapping("/user-skills")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<UserSkill> create(@Valid @RequestBody UserSkill user_skill) throws URISyntaxException {
         UserSkill result = user_skillService.create(user_skill);
-        return ResponseEntity.created(new URI("/api/user_skills/" + result.getId())).body(result);
+        return ResponseEntity.created(new URI("/api/user-skills/" + result.getId())).body(result);
     }
 
-    @PutMapping("/user_skills/{id}")
+    @PutMapping("/user-skills/{id}")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<UserSkill> update(@PathVariable("id") Long id, @Valid @RequestBody UserSkill user_skill){
         if (user_skill.getId() == null) user_skill.setId(id);
@@ -51,7 +51,7 @@ public class UserSkillController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/user_skills")
+    @GetMapping("/user-skills")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<UserSkill>> getUserSkillPages(@ParameterObject UserSkillCriteria criteria, @ParameterObject Pageable pageable) {
         Page<UserSkill> page = queryUserSkillService.findPageByCriteria(criteria, pageable);
@@ -59,21 +59,21 @@ public class UserSkillController {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("/user_skills/all")
+    @GetMapping("/user-skills/all")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<UserSkill>> getAllUserSkills(@ParameterObject UserSkillCriteria criteria){
-        List<UserSkill> user_skills = queryUserSkillService.findListByCriteria(criteria);
-        return ResponseEntity.ok(user_skills);
+        List<UserSkill> userSkills = queryUserSkillService.findListByCriteria(criteria);
+        return ResponseEntity.ok(userSkills);
     }
 
-    @GetMapping("/user_skills/{id}")
+    @GetMapping("/user-skills/{id}")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<UserSkill> getById(@PathVariable("id") Long id){
         UserSkill res = queryUserSkillService.getById(id);
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/user_skills/{id}")
+    @DeleteMapping("/user-skills/{id}")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         user_skillService.delete(id);

@@ -1,0 +1,70 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="08" author="nvhuy">
+        <insert tableName="industry">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Software Engineering"/>
+            <column name="description" value="Designing, developing, and maintaining software systems."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Mechanical Engineering"/>
+            <column name="description" value="Applying principles of mechanics and energy to design machines and devices."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Data Science"/>
+            <column name="description" value="Analyzing and interpreting complex data to aid decision-making."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="Cybersecurity"/>
+            <column name="description" value="Protecting computer systems and networks from information disclosure and theft."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="5"/>
+            <column name="name" value="Finance"/>
+            <column name="description" value="Managing money, investments, and financial planning."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="6"/>
+            <column name="name" value="Human Resources"/>
+            <column name="description" value="Managing employee relations, recruitment, and organizational development."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="7"/>
+            <column name="name" value="Marketing"/>
+            <column name="description" value="Promoting products or services through market research and advertising."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="8"/>
+            <column name="name" value="Nursing"/>
+            <column name="description" value="Providing healthcare and support to patients in medical settings."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="9"/>
+            <column name="name" value="Graphic Design"/>
+            <column name="description" value="Creating visual content to communicate messages using typography and imagery."/>
+        </insert>
+
+        <insert tableName="industry">
+            <column name="id" valueNumeric="10"/>
+            <column name="name" value="Civil Engineering"/>
+            <column name="description" value="Designing and constructing infrastructure like roads, bridges, and buildings."/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

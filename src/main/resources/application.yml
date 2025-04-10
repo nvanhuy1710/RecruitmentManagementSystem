@@ -1,3 +1,6 @@
+logging:
+  level:
+    root: INFO
 spring:
   session:
     timeout: 180m
@@ -16,7 +19,7 @@ spring:
       allow-credentials: true
       max-age: 3600
   application:
-    name: homeworkoutapplication
+    name: recruitmentsystem
   datasource:
     url: jdbc:mysql://localhost:3306/recruitment_system?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: root

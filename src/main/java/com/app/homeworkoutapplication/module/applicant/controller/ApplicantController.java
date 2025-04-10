@@ -4,7 +4,7 @@ import com.app.homeworkoutapplication.module.applicant.dto.Applicant;
 import com.app.homeworkoutapplication.module.applicant.service.ApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.QueryApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.criteria.ApplicantCriteria;
-import com.app.homeworkoutapplication.security.AuthorityConstant;
+import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
@@ -12,12 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.PaginationUtil;
 
 import java.net.URI;
@@ -32,9 +31,12 @@ public class ApplicantController {
     private final ApplicantService applicantService;
     private final QueryApplicantService queryApplicantService;
 
-    public ApplicantController(ApplicantService applicantService, QueryApplicantService queryApplicantService) {
+    private final CurrentUserUtil currentUserUtil;
+
+    public ApplicantController(ApplicantService applicantService, QueryApplicantService queryApplicantService, CurrentUserUtil currentUserUtil) {
         this.applicantService = applicantService;
         this.queryApplicantService = queryApplicantService;
+        this.currentUserUtil = currentUserUtil;
     }
 
     @PostMapping(value = "/applicants")
@@ -49,6 +51,14 @@ public class ApplicantController {
 
     @GetMapping("/applicants")
     public ResponseEntity<List<Applicant>> getApplicantPages(@ParameterObject ApplicantCriteria criteria, @ParameterObject Pageable pageable) {
+        Page<Applicant> page = queryApplicantService.findPageByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/my-applicants")
+    public ResponseEntity<List<Applicant>> getMyApplicantPages(@ParameterObject ApplicantCriteria criteria, @ParameterObject Pageable pageable) {
+        criteria.setUserId(setCurrentUser());
         Page<Applicant> page = queryApplicantService.findPageByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -70,5 +80,11 @@ public class ApplicantController {
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         applicantService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private LongFilter setCurrentUser() {
+        LongFilter id = new LongFilter();
+        id.setEquals(currentUserUtil.getCurrentUser().getId());
+        return id;
     }
 } 

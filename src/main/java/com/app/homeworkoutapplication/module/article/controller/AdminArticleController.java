@@ -1,5 +1,7 @@
 package com.app.homeworkoutapplication.module.article.controller;
 
+import com.app.homeworkoutapplication.entity.enumeration.ArticleStatus;
+import com.app.homeworkoutapplication.entity.filter.ArticleStatusFilter;
 import com.app.homeworkoutapplication.module.article.dto.Article;
 import com.app.homeworkoutapplication.module.article.service.QueryArticleService;
 import com.app.homeworkoutapplication.module.article.service.ArticleService;
@@ -28,7 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @SecurityRequirement(name = "Authentication")
-public class ArticleController {
+public class AdminArticleController {
 
     private final ArticleService articleService;
 
@@ -36,61 +38,51 @@ public class ArticleController {
 
     private final CurrentUserUtil currentUserUtil;
 
-    public ArticleController(ArticleService articleService, QueryArticleService queryArticleService, CurrentUserUtil currentUserUtil) {
+    public AdminArticleController(ArticleService articleService, QueryArticleService queryArticleService, CurrentUserUtil currentUserUtil) {
         this.articleService = articleService;
         this.queryArticleService = queryArticleService;
         this.currentUserUtil = currentUserUtil;
     }
 
-    @PostMapping("/articles")
-    public ResponseEntity<Article> create(@RequestPart("article") Article article, @RequestPart("image")MultipartFile file) throws URISyntaxException {
-        Article result = articleService.create(article, file);
-        return ResponseEntity.created(new URI("/api/articles/" + result.getId())).body(result);
-    }
+    @GetMapping("/admin-articles/pending-approve")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<List<Article>> getPendingArticlePages(@ParameterObject ArticleCriteria criteria, @ParameterObject Pageable pageable) {
 
-    @PutMapping("/articles/{id}")
-    public ResponseEntity<Article> update(@PathVariable("id") Long id, @Valid @RequestBody Article article){
-        if (article.getId() == null) article.setId(id);
-        Article res = articleService.update(article);
-        return ResponseEntity.ok(res);
-    }
+        ArticleStatusFilter statusFilter = new ArticleStatusFilter();
+        statusFilter.setEquals(ArticleStatus.PENDING);
+        criteria.setStatus(statusFilter);
 
-    @PutMapping("/articles/{id}/update-image")
-    public ResponseEntity<Article> updateImg(@PathVariable("id") Long id,@RequestParam("file") MultipartFile file){
-        articleService.updateImage(id, file);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/articles")
-    public ResponseEntity<List<Article>> getArticlePages(@ParameterObject ArticleCriteria criteria, @ParameterObject Pageable pageable) {
-        criteria.setUserId(setCurrentUser());
         Page<Article> page = queryArticleService.findPageByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("/articles/all")
+    @GetMapping("/admin-articles")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<List<Article>> getArticlePages(@ParameterObject ArticleCriteria criteria, @ParameterObject Pageable pageable) {
+        Page<Article> page = queryArticleService.findPageByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/admin-articles/all")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<Article>> getAllArticles(@ParameterObject ArticleCriteria criteria){
-        criteria.setUserId(setCurrentUser());
         List<Article> articles = queryArticleService.findListByCriteria(criteria);
         return ResponseEntity.ok(articles);
     }
 
-    @GetMapping("/articles/{id}")
-    public ResponseEntity<Article> getById(@PathVariable("id") Long id){
-        Article res = queryArticleService.getById(id);
-        return ResponseEntity.ok(res);
-    }
-
-    @DeleteMapping("/articles/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id){
-        articleService.delete(id);
+    @PutMapping("/admin-articles/{id}/approve")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<Void> approve(@PathVariable("id") Long id){
+        articleService.approve(id);
         return ResponseEntity.noContent().build();
     }
 
-    private LongFilter setCurrentUser() {
-        LongFilter id = new LongFilter();
-        id.setEquals(currentUserUtil.getCurrentUser().getId());
-        return id;
+    @PutMapping("/admin-articles/{id}/reject")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<Void> reject(@PathVariable("id") Long id){
+        articleService.reject(id);
+        return ResponseEntity.noContent().build();
     }
 }

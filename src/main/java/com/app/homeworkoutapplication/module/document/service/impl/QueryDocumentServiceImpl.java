@@ -1,5 +1,7 @@
 package com.app.homeworkoutapplication.module.document.service.impl;
 
+import com.app.homeworkoutapplication.entity.ApplicantEntity;
+import com.app.homeworkoutapplication.entity.ApplicantEntity_;
 import com.app.homeworkoutapplication.entity.DocumentEntity;
 import com.app.homeworkoutapplication.entity.DocumentEntity_;
 import com.app.homeworkoutapplication.entity.mapper.DocumentMapper;
@@ -8,6 +10,8 @@ import com.app.homeworkoutapplication.module.document.service.QueryDocumentServi
 import com.app.homeworkoutapplication.module.document.service.criteria.DocumentCriteria;
 import com.app.homeworkoutapplication.repository.DocumentRepository;
 import com.app.homeworkoutapplication.web.rest.error.exception.NotFoundException;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.LongFilter;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +51,15 @@ public class QueryDocumentServiceImpl extends QueryService<DocumentEntity> imple
         );
     }
 
+    @Override
+    public List<Document> findByApplicantId(Long id) {
+        DocumentCriteria criteria = new DocumentCriteria();
+        LongFilter idFilter = new LongFilter();
+        idFilter.setEquals(id);
+        criteria.setApplicantId(idFilter);
+        return findListByCriteria(criteria);
+    }
+
     public Document getById(Long id) {
         Optional<DocumentEntity> documentEntity = documentRepository.findById(id);
         if (documentEntity.isEmpty()) {
@@ -72,7 +86,30 @@ public class QueryDocumentServiceImpl extends QueryService<DocumentEntity> imple
         if (criteria.getName() != null) {
             specification = specification.and(buildStringSpecification(criteria.getName(), DocumentEntity_.name));
         }
+        if (criteria.getApplicantId() != null) {
+            specification = specification.and(findByApplicantId(criteria.getApplicantId()));
+
+        }
 
         return specification;
+    }
+
+    private Specification<DocumentEntity> findByApplicantId(LongFilter id) {
+        if (id.getEquals() != null) {
+            return (root, query, criteriaBuilder) -> {
+                Join<DocumentEntity, ApplicantEntity> join = root.join(DocumentEntity_.applicant, JoinType.LEFT);
+                return criteriaBuilder.equal(join.get(ApplicantEntity_.id), id.getEquals());
+            };
+        }
+        if (id.getIn() != null) {
+            return (root, query, criteriaBuilder) -> {
+                Join<DocumentEntity, ApplicantEntity> aiModelEntityJoin = root.join(
+                        DocumentEntity_.applicant,
+                        JoinType.LEFT
+                );
+                return aiModelEntityJoin.get(ApplicantEntity_.id).in(id.getIn());
+            };
+        }
+        return null;
     }
 }

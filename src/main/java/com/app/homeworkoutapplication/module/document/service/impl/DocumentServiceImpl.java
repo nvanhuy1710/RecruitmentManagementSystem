@@ -6,6 +6,7 @@ import com.app.homeworkoutapplication.module.document.dto.Document;
 import com.app.homeworkoutapplication.module.document.service.DocumentService;
 import com.app.homeworkoutapplication.module.document.service.QueryDocumentService;
 import com.app.homeworkoutapplication.repository.DocumentRepository;
+import com.app.homeworkoutapplication.util.BlobStoragePathUtil;
 import com.app.homeworkoutapplication.web.rest.error.exception.BadRequestException;
 import org.apache.commons.text.StringSubstitutor;
 import org.slf4j.Logger;
@@ -22,8 +23,6 @@ public class DocumentServiceImpl implements DocumentService {
 
     Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
 
-    private String EXERCISE_PATH = "homeworkoutapplication/exercise/{id}/";
-
     private final DocumentRepository documentRepository;
 
     private final QueryDocumentService queryDocumentService;
@@ -32,11 +31,14 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final BlobStorageService blobStorageService;
 
-    public DocumentServiceImpl(DocumentRepository documentRepository, QueryDocumentService queryDocumentService, DocumentMapper documentMapper, BlobStorageService blobStorageService) {
+    private final BlobStoragePathUtil blobStoragePathUtil;
+
+    public DocumentServiceImpl(DocumentRepository documentRepository, QueryDocumentService queryDocumentService, DocumentMapper documentMapper, BlobStorageService blobStorageService, BlobStoragePathUtil blobStoragePathUtil) {
         this.documentRepository = documentRepository;
         this.queryDocumentService = queryDocumentService;
         this.documentMapper = documentMapper;
         this.blobStorageService = blobStorageService;
+        this.blobStoragePathUtil = blobStoragePathUtil;
     }
 
     public Document create(Document document, MultipartFile file) {
@@ -44,11 +46,9 @@ public class DocumentServiceImpl implements DocumentService {
             throw new BadRequestException("id not null!");
         }
 
-        String fileName = file.getOriginalFilename();
-
         Map<String, String> values = new HashMap<>();
         values.put("id", UUID.randomUUID().toString());
-        String filePath = StringSubstitutor.replace(EXERCISE_PATH, values, "{", "}") + fileName;
+        String filePath = blobStoragePathUtil.getDocumentPath(UUID.randomUUID().toString(), file.getOriginalFilename());
         blobStorageService.save(file, filePath);
         document.setFilePath(filePath);
 

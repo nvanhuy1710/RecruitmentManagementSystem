@@ -36,14 +36,14 @@ public class JobLevelController {
         this.queryJobLevelService = queryJobLevelService;
     }
 
-    @PostMapping("/job_levels")
+    @PostMapping("/job-levels")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<JobLevel> create(@Valid @RequestBody JobLevel job_level) throws URISyntaxException {
         JobLevel result = jobLevelService.create(job_level);
-        return ResponseEntity.created(new URI("/api/job_levels/" + result.getId())).body(result);
+        return ResponseEntity.created(new URI("/api/job-levels/" + result.getId())).body(result);
     }
 
-    @PutMapping("/job_levels/{id}")
+    @PutMapping("/job-levels/{id}")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<JobLevel> update(@PathVariable("id") Long id, @Valid @RequestBody JobLevel job_level){
         if (job_level.getId() == null) job_level.setId(id);
@@ -51,7 +51,7 @@ public class JobLevelController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/job_levels")
+    @GetMapping("/job-levels")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<JobLevel>> getJobLevelPages(@ParameterObject JobLevelCriteria criteria, @ParameterObject Pageable pageable) {
         Page<JobLevel> page = queryJobLevelService.findPageByCriteria(criteria, pageable);
@@ -59,21 +59,21 @@ public class JobLevelController {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    @GetMapping("/job_levels/all")
+    @GetMapping("/job-levels/all")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<JobLevel>> getAllJobLevels(@ParameterObject JobLevelCriteria criteria){
-        List<JobLevel> job_levels = queryJobLevelService.findListByCriteria(criteria);
-        return ResponseEntity.ok(job_levels);
+        List<JobLevel> jobLevels = queryJobLevelService.findListByCriteria(criteria);
+        return ResponseEntity.ok(jobLevels);
     }
 
-    @GetMapping("/job_levels/{id}")
+    @GetMapping("/job-levels/{id}")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<JobLevel> getById(@PathVariable("id") Long id){
         JobLevel res = queryJobLevelService.getById(id);
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/job_levels/{id}")
+    @DeleteMapping("/job-levels/{id}")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id){
         jobLevelService.delete(id);

@@ -17,7 +17,7 @@ public class ArticleCriteria implements Serializable {
     private StringFilter content;
     private StringFilter address;
     private StringFilter location;
-    private IntegerFilter salary;
+    private LongFilter salary;
     private InstantFilter dueDate;
     private ArticleStatusFilter status;
     private LongFilter industryId;
