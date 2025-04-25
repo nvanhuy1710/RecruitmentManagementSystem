@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -66,4 +67,17 @@ public class ApplicantEntity implements Serializable {
 
     @OneToMany(mappedBy = "applicant")
     private Set<DocumentEntity> documents = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ApplicantEntity that = (ApplicantEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(fullName, that.fullName) && Objects.equals(phone, that.phone) && Objects.equals(coverLetter, that.coverLetter) && status == that.status && Objects.equals(createdDate, that.createdDate) && Objects.equals(lastModifiedDate, that.lastModifiedDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fullName, phone, coverLetter, status, createdDate, lastModifiedDate);
+    }
 }

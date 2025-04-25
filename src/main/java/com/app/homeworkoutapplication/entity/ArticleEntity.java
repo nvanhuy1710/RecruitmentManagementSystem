@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -85,4 +86,17 @@ public class ArticleEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArticleEntity that = (ArticleEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(mainImagePath, that.mainImagePath) && Objects.equals(content, that.content) && Objects.equals(requirement, that.requirement) && Objects.equals(address, that.address) && Objects.equals(location, that.location) && Objects.equals(company, that.company) && Objects.equals(fromSalary, that.fromSalary) && Objects.equals(toSalary, that.toSalary) && Objects.equals(dueDate, that.dueDate) && status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, mainImagePath, content, requirement, address, location, company, fromSalary, toSalary, dueDate, status);
+    }
 }

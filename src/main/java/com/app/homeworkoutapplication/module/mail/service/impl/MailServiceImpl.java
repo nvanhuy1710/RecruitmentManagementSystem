@@ -1,5 +1,6 @@
 package com.app.homeworkoutapplication.module.mail.service.impl;
 
+import com.app.homeworkoutapplication.entity.enumeration.ApplicantStatus;
 import com.app.homeworkoutapplication.module.mail.service.MailService;
 import com.app.homeworkoutapplication.module.user.dto.User;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,24 @@ public class MailServiceImpl implements MailService {
         String subject = "Account Activation";
         String activationLink = activationUrl + "?email=" + user.getEmail();
         String message = "Click on the link to activate your account: " + activationLink;
+
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setTo(user.getEmail());
+        email.setSubject(subject);
+        email.setText(message);
+
+        mailSender.send(email);
+    }
+
+    @Override
+    public void sendReviewApplicantResult(User user, ApplicantStatus status) {
+        String subject = "Review Result";
+
+        String message = "Congratulations! You've been accepted by the employer. Please wait for their contact.";
+
+        if(status.equals(ApplicantStatus.DECLINED)) {
+            message = "We're sorry, but your CV has been rejected by the employer. You may apply elsewhere.";
+        }
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(user.getEmail());

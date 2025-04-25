@@ -7,10 +7,11 @@ import com.app.homeworkoutapplication.module.applicant.service.ApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.QueryApplicantService;
 import com.app.homeworkoutapplication.module.document.dto.Document;
 import com.app.homeworkoutapplication.module.document.service.DocumentService;
+import com.app.homeworkoutapplication.module.mail.service.MailService;
+import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.repository.ApplicantRepository;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import com.app.homeworkoutapplication.web.rest.error.exception.BadRequestException;
-import jakarta.mail.Multipart;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,13 +27,17 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final QueryApplicantService queryApplicantService;
     private final DocumentService documentService;
     private final CurrentUserUtil currentUserUtil;
+    private final QueryUserService queryUserService;
+    private final MailService mailService;
 
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicantMapper applicantMapper, QueryApplicantService queryApplicantService, DocumentService documentService, CurrentUserUtil currentUserUtil) {
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicantMapper applicantMapper, QueryApplicantService queryApplicantService, DocumentService documentService, CurrentUserUtil currentUserUtil, QueryUserService queryUserService, MailService mailService) {
         this.applicantRepository = applicantRepository;
         this.applicantMapper = applicantMapper;
         this.queryApplicantService = queryApplicantService;
         this.documentService = documentService;
         this.currentUserUtil = currentUserUtil;
+        this.queryUserService = queryUserService;
+        this.mailService = mailService;
     }
 
     @Override
@@ -55,6 +60,22 @@ public class ApplicantServiceImpl implements ApplicantService {
         }
 
         return result;
+    }
+
+    @Override
+    public void accept(Long id) {
+        Applicant applicant = queryApplicantService.getById(id);
+        applicant.setStatus(ApplicantStatus.ACCEPTED);
+        applicantRepository.save(applicantMapper.toEntity(applicant));
+        mailService.sendReviewApplicantResult(queryUserService.findById(applicant.getUserId()), ApplicantStatus.ACCEPTED);
+    }
+
+    @Override
+    public void decline(Long id) {
+        Applicant applicant = queryApplicantService.getById(id);
+        applicant.setStatus(ApplicantStatus.DECLINED);
+        applicantRepository.save(applicantMapper.toEntity(applicant));
+        mailService.sendReviewApplicantResult(queryUserService.findById(applicant.getUserId()), ApplicantStatus.DECLINED);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.app.homeworkoutapplication.module.user.controller;
 
+import com.app.homeworkoutapplication.module.user.dto.UpdateUserRole;
 import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.module.user.service.UserService;
@@ -44,6 +45,16 @@ public class UserController {
             @RequestBody User user){
         if (user.getId() == null) user.setId(id);
         User res = userService.save(user);
+        return ResponseEntity.ok(res);
+    }
+
+    @PutMapping("/users/{id}/role")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<User> updateRole(
+            @Parameter(description = "ID of the user to be updated", required = true)
+            @PathVariable("id") Long id,
+            @RequestBody UpdateUserRole updateUserRole){
+        User res = userService.updateRole(id, updateUserRole.getRoleName());
         return ResponseEntity.ok(res);
     }
 

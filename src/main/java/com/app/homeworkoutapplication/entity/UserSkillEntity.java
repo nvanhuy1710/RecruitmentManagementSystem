@@ -7,6 +7,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -30,4 +31,17 @@ public class UserSkillEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "skill_id", nullable = false)
     private SkillEntity skill;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserSkillEntity that = (UserSkillEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

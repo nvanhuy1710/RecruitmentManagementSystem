@@ -51,7 +51,6 @@ public class WorkingModelController {
     }
 
     @GetMapping("/working-models")
-    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<WorkingModel>> getWorkingModelPages(@ParameterObject WorkingModelCriteria criteria, @ParameterObject Pageable pageable) {
         Page<WorkingModel> page = queryWorkingModelService.findPageByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -59,14 +58,12 @@ public class WorkingModelController {
     }
 
     @GetMapping("/working-models/all")
-    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<WorkingModel>> getAllWorkingModels(@ParameterObject WorkingModelCriteria criteria) {
         List<WorkingModel> workingModels = queryWorkingModelService.findListByCriteria(criteria);
         return ResponseEntity.ok(workingModels);
     }
 
     @GetMapping("/working-models/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<WorkingModel> getById(@PathVariable("id") Long id) {
         WorkingModel res = queryWorkingModelService.getById(id);
         return ResponseEntity.ok(res);

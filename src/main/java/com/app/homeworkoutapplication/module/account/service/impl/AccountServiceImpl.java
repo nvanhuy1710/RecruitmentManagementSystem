@@ -6,20 +6,19 @@ import com.app.homeworkoutapplication.module.account.service.AccountService;
 import com.app.homeworkoutapplication.module.blobstorage.service.BlobStorageService;
 import com.app.homeworkoutapplication.module.mail.service.MailService;
 import com.app.homeworkoutapplication.module.industry.service.QueryIndustryService;
+import com.app.homeworkoutapplication.module.role.dto.Role;
+import com.app.homeworkoutapplication.module.role.service.QueryRoleService;
 import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.module.user.service.UserService;
 import com.app.homeworkoutapplication.util.BlobStoragePathUtil;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
-import org.apache.commons.text.StringSubstitutor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @Transactional
@@ -44,9 +43,11 @@ public class AccountServiceImpl implements AccountService {
 
     private final QueryUserService queryUserService;
 
+    private final QueryRoleService queryRoleService;
+
     private final BlobStoragePathUtil blobStoragePathUtil;
 
-    public AccountServiceImpl(MailService mailService, PasswordEncoder passwordEncoder, UserMapper userMapper, QueryIndustryService queryIndustryService, BlobStorageService blobStorageService, CurrentUserUtil currentUserUtil, UserService userService, QueryUserService queryUserService, BlobStoragePathUtil blobStoragePathUtil) {
+    public AccountServiceImpl(MailService mailService, PasswordEncoder passwordEncoder, UserMapper userMapper, QueryIndustryService queryIndustryService, BlobStorageService blobStorageService, CurrentUserUtil currentUserUtil, UserService userService, QueryUserService queryUserService, QueryRoleService queryRoleService, BlobStoragePathUtil blobStoragePathUtil) {
         this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
@@ -55,6 +56,7 @@ public class AccountServiceImpl implements AccountService {
         this.currentUserUtil = currentUserUtil;
         this.userService = userService;
         this.queryUserService = queryUserService;
+        this.queryRoleService = queryRoleService;
         this.blobStoragePathUtil = blobStoragePathUtil;
     }
 
@@ -64,12 +66,16 @@ public class AccountServiceImpl implements AccountService {
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
 
         User newUser = new User();
+        Role role = queryRoleService.getByName("USER");
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(encodedPassword);
         newUser.setEmail(registerRequest.getEmail());
+        newUser.setBirth(registerRequest.getBirth());
+        newUser.setGender(registerRequest.getGender());
+        newUser.setFullName(registerRequest.getFullName());
         newUser.setIsActivated(false);
+        newUser.setRoleId(role.getId());
         newUser = userService.save(newUser);
-//        userService.save(newUser)
         mailService.sendActivationEmail(newUser);
         return newUser;
     }

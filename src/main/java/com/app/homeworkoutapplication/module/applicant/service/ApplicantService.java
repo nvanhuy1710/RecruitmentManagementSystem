@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface ApplicantService {
     Applicant create(Applicant applicant, List<MultipartFile> files);
+    void accept(Long id);
+    void decline(Long id);
     void delete(Long id);
 } 

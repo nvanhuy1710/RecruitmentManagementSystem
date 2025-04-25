@@ -4,6 +4,7 @@ import com.app.homeworkoutapplication.module.applicant.dto.Applicant;
 import com.app.homeworkoutapplication.module.applicant.service.ApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.QueryApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.criteria.ApplicantCriteria;
+import com.app.homeworkoutapplication.security.AuthorityConstant;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -50,6 +52,7 @@ public class ApplicantController {
     }
 
     @GetMapping("/applicants")
+    @PreAuthorize("hasAnyAuthority('" + AuthorityConstant.EMPLOYER + "', '" + AuthorityConstant.ADMIN + "')")
     public ResponseEntity<List<Applicant>> getApplicantPages(@ParameterObject ApplicantCriteria criteria, @ParameterObject Pageable pageable) {
         Page<Applicant> page = queryApplicantService.findPageByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -74,6 +77,20 @@ public class ApplicantController {
     public ResponseEntity<Applicant> getById(@PathVariable("id") Long id) {
         Applicant res = queryApplicantService.getById(id);
         return ResponseEntity.ok(res);
+    }
+
+    @PutMapping("/applicants/{id}/accept")
+    @PreAuthorize("hasAnyAuthority('" + AuthorityConstant.EMPLOYER + "', '" + AuthorityConstant.ADMIN + "')")
+    public ResponseEntity<Void> acceptApplicant(@PathVariable Long id) {
+        applicantService.accept(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/applicants/{id}/decline")
+    @PreAuthorize("hasAnyAuthority('" + AuthorityConstant.EMPLOYER + "', '" + AuthorityConstant.ADMIN + "')")
+    public ResponseEntity<List<Applicant>> declineApplicant(@PathVariable Long id) {
+        applicantService.decline(id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/applicants/{id}")

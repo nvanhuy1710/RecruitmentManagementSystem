@@ -1,6 +1,8 @@
 package com.app.homeworkoutapplication.module.user.service.impl;
 
 import com.app.homeworkoutapplication.entity.mapper.UserMapper;
+import com.app.homeworkoutapplication.module.role.dto.Role;
+import com.app.homeworkoutapplication.module.role.service.QueryRoleService;
 import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.module.user.service.UserService;
@@ -18,11 +20,14 @@ public class UserServiceImpl implements UserService {
 
     private final QueryUserService queryUserService;
 
+    private final QueryRoleService queryRoleService;
+
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, QueryUserService queryUserService, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, QueryUserService queryUserService, QueryRoleService queryRoleService, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.queryUserService = queryUserService;
+        this.queryRoleService = queryRoleService;
         this.userMapper = userMapper;
     }
 
@@ -46,6 +51,14 @@ public class UserServiceImpl implements UserService {
             validateUser(user);
         }
 
+        return userMapper.toDto(userRepository.save(userMapper.toEntity(user)));
+    }
+
+    @Override
+    public User updateRole(Long userId, String roleName) {
+        Role role = queryRoleService.getByName(roleName);
+        User user = queryUserService.findById(userId);
+        user.setRoleId(role.getId());
         return userMapper.toDto(userRepository.save(userMapper.toEntity(user)));
     }
 

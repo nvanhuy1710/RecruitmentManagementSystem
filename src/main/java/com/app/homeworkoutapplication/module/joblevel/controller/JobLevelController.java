@@ -60,14 +60,12 @@ public class JobLevelController {
     }
 
     @GetMapping("/job-levels/all")
-    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<JobLevel>> getAllJobLevels(@ParameterObject JobLevelCriteria criteria){
         List<JobLevel> jobLevels = queryJobLevelService.findListByCriteria(criteria);
         return ResponseEntity.ok(jobLevels);
     }
 
     @GetMapping("/job-levels/{id}")
-    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<JobLevel> getById(@PathVariable("id") Long id){
         JobLevel res = queryJobLevelService.getById(id);
         return ResponseEntity.ok(res);

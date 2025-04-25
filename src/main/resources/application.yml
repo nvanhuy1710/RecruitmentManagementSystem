@@ -61,7 +61,7 @@ springdoc:
     path: /authentication-service/v3/api-docs
 app:
   activation:
-    url: https://homeworkout.up.railway.app/api/activate
+    url: http://localhost:8080/api/activate
   firebase-configuration-file: homeworkoutapplication-a9904-firebase-adminsdk-ru9rz-685a83ba9f.json
 
 storage:

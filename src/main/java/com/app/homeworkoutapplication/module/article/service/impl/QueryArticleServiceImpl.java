@@ -108,7 +108,7 @@ public class QueryArticleServiceImpl extends QueryService<ArticleEntity> impleme
             specification = specification.and(specFindBySalary(criteria.getSalary()));
         }
         if (criteria.getDueDate() != null) {
-            specification = specification.and(buildSpecification(criteria.getDueDate(), ArticleEntity_.dueDate));
+            specification = specification.and(buildRangeSpecification(criteria.getDueDate(), ArticleEntity_.dueDate));
         }
         if (criteria.getStatus() != null) {
             specification = specification.and(buildSpecification(criteria.getStatus(), ArticleEntity_.status));

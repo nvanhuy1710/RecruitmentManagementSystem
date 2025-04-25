@@ -106,11 +106,33 @@ public class QueryApplicantServiceImpl extends QueryService<ApplicantEntity> imp
         if (criteria.getStatus() != null) {
             specification = specification.and(buildSpecification(criteria.getStatus(), ApplicantEntity_.status));
         }
+        if (criteria.getArticleId() != null) {
+            specification = specification.and(findBArticleId(criteria.getArticleId()));
+        }
         if (criteria.getUserId() != null) {
             specification = specification.and(findByUserId(criteria.getUserId()));
         }
 
         return specification;
+    }
+
+    private Specification<ApplicantEntity> findBArticleId(LongFilter id) {
+        if (id.getEquals() != null) {
+            return (root, query, criteriaBuilder) -> {
+                Join<ApplicantEntity, ArticleEntity> join = root.join(ApplicantEntity_.article, JoinType.LEFT);
+                return criteriaBuilder.equal(join.get(ArticleEntity_.id), id.getEquals());
+            };
+        }
+        if (id.getIn() != null) {
+            return (root, query, criteriaBuilder) -> {
+                Join<ApplicantEntity, ArticleEntity> aiModelEntityJoin = root.join(
+                        ApplicantEntity_.article,
+                        JoinType.LEFT
+                );
+                return aiModelEntityJoin.get(ArticleEntity_.id).in(id.getIn());
+            };
+        }
+        return null;
     }
 
     private Specification<ApplicantEntity> findByUserId(LongFilter id) {

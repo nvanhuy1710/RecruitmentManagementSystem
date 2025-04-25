@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/login", "/api/auth/refresh-token").permitAll()
-                        .requestMatchers("/api/register").permitAll()
+                        .requestMatchers("/api/register", "/api/job-levels/**", "/api/industries/**", "/api/working-models/**").permitAll()
                         .requestMatchers("/api/activate").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/authentication-service/**").permitAll() // Cho phép truy cập Swagger
                         .requestMatchers("/public/api/**").permitAll()

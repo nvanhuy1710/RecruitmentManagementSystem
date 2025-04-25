@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -71,4 +72,17 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy = "user")
     private Set<UserSkillEntity> userSkills = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(fullName, that.fullName) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(gender, that.gender) && Objects.equals(birth, that.birth) && Objects.equals(avatarPath, that.avatarPath) && Objects.equals(isActivated, that.isActivated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, fullName, username, password, gender, birth, avatarPath, isActivated);
+    }
 }

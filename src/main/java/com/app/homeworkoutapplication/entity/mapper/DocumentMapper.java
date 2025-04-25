@@ -11,8 +11,10 @@ import org.mapstruct.Mapping;
 public interface DocumentMapper extends EntityMapper<Document, DocumentEntity> {
 
     @Mapping(target = "applicantId", source = "applicant.id")
+    @Mapping(target = "applicant", ignore = true)
     Document toDto(DocumentEntity entity);
 
     @Mapping(target = "applicant.id", source = "applicantId")
+    @Mapping(target = "applicant", ignore = true)
     DocumentEntity toEntity(Document dto);
 } 
