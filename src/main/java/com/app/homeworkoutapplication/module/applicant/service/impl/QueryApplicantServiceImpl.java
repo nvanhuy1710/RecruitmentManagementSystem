@@ -67,6 +67,17 @@ public class QueryApplicantServiceImpl extends QueryService<ApplicantEntity> imp
     }
 
     @Override
+    public List<Applicant> findListByArticleId(Long articleId) {
+        ApplicantCriteria criteria = new ApplicantCriteria();
+
+        LongFilter filter = new LongFilter();
+        filter.setEquals(articleId);
+        criteria.setArticleId(filter);
+
+        return findListByCriteria(criteria);
+    }
+
+    @Override
     public Page<Applicant> findPageByCriteria(ApplicantCriteria criteria, Pageable pageable) {
         Page<ApplicantEntity> page = applicantRepository.findAll(createSpecification(criteria), pageable);
         return new PageImpl<>(

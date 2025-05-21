@@ -43,6 +43,9 @@ public class ApplicantEntity implements Serializable {
     @Column(name = "cover_letter")
     private String coverLetter;
 
+    @Column(name = "match_score")
+    private Double matchScore;
+
     @NotNull
     @Size(max = 255)
     @Column(name = "status", nullable = false)

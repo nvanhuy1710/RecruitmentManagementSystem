@@ -14,6 +14,7 @@ public class Applicant {
     private String fullName;
     private String phone;
     private String coverLetter;
+    private Double matchScore;
     private ApplicantStatus status;
     private Instant createdDate;
     private Instant lastModifiedDate;

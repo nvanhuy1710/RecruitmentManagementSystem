@@ -12,6 +12,7 @@ import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.repository.ApplicantRepository;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import com.app.homeworkoutapplication.web.rest.error.exception.BadRequestException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +30,9 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final CurrentUserUtil currentUserUtil;
     private final QueryUserService queryUserService;
     private final MailService mailService;
+    private final ObjectMapper objectMapper;
 
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicantMapper applicantMapper, QueryApplicantService queryApplicantService, DocumentService documentService, CurrentUserUtil currentUserUtil, QueryUserService queryUserService, MailService mailService) {
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicantMapper applicantMapper, QueryApplicantService queryApplicantService, DocumentService documentService, CurrentUserUtil currentUserUtil, QueryUserService queryUserService, MailService mailService, ObjectMapper objectMapper) {
         this.applicantRepository = applicantRepository;
         this.applicantMapper = applicantMapper;
         this.queryApplicantService = queryApplicantService;
@@ -38,6 +40,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         this.currentUserUtil = currentUserUtil;
         this.queryUserService = queryUserService;
         this.mailService = mailService;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -60,6 +63,13 @@ public class ApplicantServiceImpl implements ApplicantService {
         }
 
         return result;
+    }
+
+    @Override
+    public Applicant updateScore(Long id, Double score) {
+        Applicant applicant = queryApplicantService.getById(id);
+        applicant.setMatchScore(score);
+        return applicantMapper.toDto(applicantRepository.save(applicantMapper.toEntity(applicant)));
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface QueryApplicantService {
     List<Applicant> findListByCriteria(ApplicantCriteria criteria);
+    List<Applicant> findListByArticleId(Long articleId);
     Page<Applicant> findPageByCriteria(ApplicantCriteria criteria, Pageable pageable);
     Applicant getById(Long id);
 } 

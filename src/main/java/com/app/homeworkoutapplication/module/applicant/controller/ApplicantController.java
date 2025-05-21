@@ -2,6 +2,7 @@ package com.app.homeworkoutapplication.module.applicant.controller;
 
 import com.app.homeworkoutapplication.module.applicant.dto.Applicant;
 import com.app.homeworkoutapplication.module.applicant.service.ApplicantService;
+import com.app.homeworkoutapplication.module.applicant.service.CaculateApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.QueryApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.criteria.ApplicantCriteria;
 import com.app.homeworkoutapplication.security.AuthorityConstant;
@@ -32,12 +33,13 @@ public class ApplicantController {
 
     private final ApplicantService applicantService;
     private final QueryApplicantService queryApplicantService;
-
+    private final CaculateApplicantService caculateApplicantService;
     private final CurrentUserUtil currentUserUtil;
 
-    public ApplicantController(ApplicantService applicantService, QueryApplicantService queryApplicantService, CurrentUserUtil currentUserUtil) {
+    public ApplicantController(ApplicantService applicantService, QueryApplicantService queryApplicantService, CaculateApplicantService caculateApplicantService, CurrentUserUtil currentUserUtil) {
         this.applicantService = applicantService;
         this.queryApplicantService = queryApplicantService;
+        this.caculateApplicantService = caculateApplicantService;
         this.currentUserUtil = currentUserUtil;
     }
 
@@ -57,6 +59,13 @@ public class ApplicantController {
         Page<Applicant> page = queryApplicantService.findPageByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/applicants/{articleId}/match-score")
+//    @PreAuthorize("hasAnyAuthority('" + AuthorityConstant.EMPLOYER + "', '" + AuthorityConstant.ADMIN + "')")
+    public ResponseEntity<Void> caculateMatchScore(@PathVariable Long articleId) {
+        caculateApplicantService.caculateMatchScore(articleId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/my-applicants")
