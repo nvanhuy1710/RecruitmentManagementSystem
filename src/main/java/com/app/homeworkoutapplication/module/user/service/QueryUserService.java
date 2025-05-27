@@ -11,6 +11,8 @@ public interface QueryUserService {
 
     List<User> findListByCriteria(UserCriteria criteria);
 
+    List<User> findListEmployee();
+
     Long count(UserCriteria criteria);
 
     Page<User> findPageByCriteria(UserCriteria criteria, Pageable pageable);

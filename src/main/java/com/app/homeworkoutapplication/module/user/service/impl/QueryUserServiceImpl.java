@@ -1,5 +1,7 @@
 package com.app.homeworkoutapplication.module.user.service.impl;
 
+import com.app.homeworkoutapplication.entity.RoleEntity;
+import com.app.homeworkoutapplication.entity.RoleEntity_;
 import com.app.homeworkoutapplication.entity.UserEntity;
 import com.app.homeworkoutapplication.entity.UserEntity_;
 import com.app.homeworkoutapplication.entity.mapper.RoleMapper;
@@ -10,6 +12,7 @@ import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.module.user.service.criteria.UserCriteria;
 import com.app.homeworkoutapplication.repository.UserRepository;
 import com.app.homeworkoutapplication.web.rest.error.exception.NotFoundException;
+import jakarta.persistence.criteria.Join;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.BooleanFilter;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +50,17 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
             fetchData(userEntity, user);
             return user;
         }).toList();
+    }
+
+    @Override
+    public List<User> findListEmployee() {
+        UserCriteria criteria = new UserCriteria();
+
+        BooleanFilter filter = new BooleanFilter();
+        filter.setEquals(true);
+
+        criteria.setEmployee(filter);
+        return findListByCriteria(criteria);
     }
 
     public Long count(UserCriteria criteria) {
@@ -114,8 +129,24 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
         if (criteria.getBirth() != null) {
             specification = specification.and(buildSpecification(criteria.getBirth(), UserEntity_.birth));
         }
+        if (criteria.getEmployee() != null) {
+            specification = specification.and(specFindEmployee(criteria.getEmployee()));
+        }
 
         return specification;
+    }
+
+    private Specification<UserEntity> specFindEmployee(BooleanFilter filter) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            if (filter.getEquals() != null) {
+                Join<UserEntity, RoleEntity> joinTask = root.join(UserEntity_.role);
+                return criteriaBuilder.equal(
+                        joinTask.get(RoleEntity_.name),
+                        "EMPLOYER"
+                );
+            }
+            return null;
+        };
     }
 
     private void fetchData(UserEntity entity, User user) {

@@ -1,7 +1,7 @@
 package com.app.homeworkoutapplication.module.user.service.criteria;
 
-import com.app.homeworkoutapplication.entity.filter.LevelFilter;
 import lombok.Data;
+import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.InstantFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
@@ -18,6 +18,8 @@ public class UserCriteria implements Serializable {
     private StringFilter fullName;
 
     private StringFilter username;
+
+    private BooleanFilter employee;
 
     private InstantFilter birth;
 }

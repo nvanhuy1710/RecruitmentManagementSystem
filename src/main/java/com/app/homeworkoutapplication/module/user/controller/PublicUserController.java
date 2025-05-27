@@ -45,6 +45,13 @@ public class PublicUserController {
         return ResponseEntity.ok(Users);
     }
 
+    @GetMapping("/users/employee/all")
+    public ResponseEntity<List<User>> getEmployeeAll(){
+        List<User> Users = queryUserService.findListEmployee();
+        Users.forEach(user -> user.setPassword(null));
+        return ResponseEntity.ok(Users);
+    }
+
     @GetMapping("/users/count")
     public ResponseEntity<Long> count(@ParameterObject UserCriteria criteria){
         return ResponseEntity.ok(queryUserService.count(criteria));
