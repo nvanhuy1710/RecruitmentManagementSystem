@@ -13,4 +13,8 @@ public class SkillCriteria implements Serializable {
     private LongFilter id;
 
     private StringFilter name;
+
+    private LongFilter userId;
+
+    private LongFilter articleId;
 }

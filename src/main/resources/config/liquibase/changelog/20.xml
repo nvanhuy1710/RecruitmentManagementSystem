@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20" author="nvhuy">
+        <dropForeignKeyConstraint
+                baseTableName="article"
+                constraintName="fk_article_industry"/>
+
+        <dropForeignKeyConstraint
+                baseTableName="article"
+                constraintName="fk_article_job_level"/>
+
+        <dropForeignKeyConstraint
+                baseTableName="article"
+                constraintName="fk_article_working_model"/>
+
+        <dropColumn tableName="article">
+            <column name="industry_id"/>
+            <column name="job_level_id"/>
+            <column name="working_model_id"/>
+        </dropColumn>
+    </changeSet>
+</databaseChangeLog>

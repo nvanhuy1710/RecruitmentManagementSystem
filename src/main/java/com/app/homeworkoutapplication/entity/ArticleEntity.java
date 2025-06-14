@@ -5,12 +5,16 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Entity
@@ -43,18 +47,6 @@ public class ArticleEntity implements Serializable {
     @Column(name = "requirement", nullable = false)
     private String requirement;
 
-    @Size(max = 255)
-    @Column(name = "address")
-    private String address;
-
-    @Size(max = 255)
-    @Column(name = "location")
-    private String location;
-
-    @Size(max = 500)
-    @Column(name = "company")
-    private String company;
-
     @Column(name = "from_salary")
     private Long fromSalary;
 
@@ -71,17 +63,29 @@ public class ArticleEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private ArticleStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "industry_id")
-    private IndustryEntity industry;
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    private Instant createdDate = Instant.now();
+
+    @LastModifiedDate
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate = Instant.now();
+
+    @OneToMany(mappedBy = "article")
+    private Set<ArticleIndustryEntity> industries = new HashSet<>();
+
+    @OneToMany(mappedBy = "article")
+    private Set<ArticleJobLevelEntity> jobLevels = new HashSet<>();
+
+    @OneToMany(mappedBy = "article")
+    private Set<ArticleWorkingModelEntity> workingModels = new HashSet<>();
+
+    @OneToMany(mappedBy = "article")
+    private Set<ArticleSkillEntity> skills = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "job_level_id")
-    private JobLevelEntity jobLevel;
-
-    @ManyToOne
-    @JoinColumn(name = "working_model_id")
-    private WorkingModelEntity workingModel;
+    @JoinColumn(name = "company_id")
+    private CompanyEntity company;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -92,11 +96,11 @@ public class ArticleEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ArticleEntity that = (ArticleEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(mainImagePath, that.mainImagePath) && Objects.equals(content, that.content) && Objects.equals(requirement, that.requirement) && Objects.equals(address, that.address) && Objects.equals(location, that.location) && Objects.equals(company, that.company) && Objects.equals(fromSalary, that.fromSalary) && Objects.equals(toSalary, that.toSalary) && Objects.equals(dueDate, that.dueDate) && status == that.status;
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(mainImagePath, that.mainImagePath) && Objects.equals(content, that.content) && Objects.equals(requirement, that.requirement) && Objects.equals(company, that.company) && Objects.equals(fromSalary, that.fromSalary) && Objects.equals(toSalary, that.toSalary) && Objects.equals(dueDate, that.dueDate) && status == that.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, mainImagePath, content, requirement, address, location, company, fromSalary, toSalary, dueDate, status);
+        return Objects.hash(id, title, mainImagePath, content, requirement, company, fromSalary, toSalary, dueDate, status);
     }
 }

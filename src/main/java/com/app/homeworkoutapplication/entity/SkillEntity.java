@@ -33,6 +33,9 @@ public class SkillEntity implements Serializable {
     @OneToMany(mappedBy = "skill")
     private Set<UserSkillEntity> userSkills = new HashSet<>();
 
+    @OneToMany(mappedBy = "skill")
+    private Set<ArticleSkillEntity> articleSkills = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

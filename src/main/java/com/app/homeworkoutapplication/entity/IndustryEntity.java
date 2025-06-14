@@ -35,7 +35,7 @@ public class IndustryEntity implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "industry")
-    private Set<ArticleEntity> articles = new HashSet<>();
+    private Set<ArticleIndustryEntity> articleIndustries = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

@@ -1,8 +1,10 @@
 package com.app.homeworkoutapplication.module.user.dto;
 
 import com.app.homeworkoutapplication.entity.enumeration.Level;
+import com.app.homeworkoutapplication.module.company.dto.Company;
 import com.app.homeworkoutapplication.module.industry.dto.Industry;
 import com.app.homeworkoutapplication.module.role.dto.Role;
+import com.app.homeworkoutapplication.module.skill.dto.Skill;
 import lombok.Data;
 
 import java.time.Instant;
@@ -34,6 +36,12 @@ public class User {
     private Long roleId;
 
     private String roleName;
+
+    private List<Long> skillIds;
+
+    private List<Skill> skills;
+
+    private List<Company> followCompanies;
 
     private Role role;
 }

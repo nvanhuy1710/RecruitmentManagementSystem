@@ -4,6 +4,7 @@ import com.app.homeworkoutapplication.entity.mapper.UserMapper;
 import com.app.homeworkoutapplication.module.account.dto.RegisterRequest;
 import com.app.homeworkoutapplication.module.account.service.AccountService;
 import com.app.homeworkoutapplication.module.blobstorage.service.BlobStorageService;
+import com.app.homeworkoutapplication.module.company.dto.Company;
 import com.app.homeworkoutapplication.module.mail.service.MailService;
 import com.app.homeworkoutapplication.module.industry.service.QueryIndustryService;
 import com.app.homeworkoutapplication.module.role.dto.Role;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
+import java.util.List;
 
 @Service
 @Transactional
@@ -94,6 +96,26 @@ public class AccountServiceImpl implements AccountService {
         Long id = currentUserUtil.getCurrentUser().getId();
         user.setId(id);
         return userService.save(user);
+    }
+
+    @Override
+    public void followCompany(Long companyId) {
+        userService.followCompany(currentUserUtil.getCurrentUser().getId(), companyId);
+    }
+
+    @Override
+    public void unFollowCompany(Long companyId) {
+        userService.unFollowCompany(currentUserUtil.getCurrentUser().getId(), companyId);
+    }
+
+    @Override
+    public List<User> findListFollowByCompanyId(Long companyId) {
+        return queryUserService.findListFollowByCompanyId(companyId);
+    }
+
+    @Override
+    public List<Company> getFollowedCompanies() {
+        return queryUserService.getFollowedCompanies(currentUserUtil.getCurrentUser().getId());
     }
 
     @Override

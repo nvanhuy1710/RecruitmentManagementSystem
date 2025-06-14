@@ -31,7 +31,7 @@ public class WorkingModelEntity implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "workingModel")
-    private Set<ArticleEntity> articles = new HashSet<>();
+    private Set<ArticleWorkingModelEntity> articleWorkingModels = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

@@ -15,13 +15,13 @@ public class ArticleCriteria implements Serializable {
     private LongFilter id;
     private StringFilter title;
     private StringFilter content;
-    private StringFilter address;
-    private StringFilter location;
     private LongFilter salary;
     private InstantFilter dueDate;
     private ArticleStatusFilter status;
+    private LongFilter companyId;
     private LongFilter industryId;
     private LongFilter jobLevelId;
     private LongFilter workingModelId;
     private LongFilter userId;
+    private Boolean sortByRelated;
 }

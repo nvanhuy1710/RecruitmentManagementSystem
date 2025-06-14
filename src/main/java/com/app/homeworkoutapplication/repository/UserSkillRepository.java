@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserSkillRepository extends JpaRepository<UserSkillEntity, Long>, JpaSpecificationExecutor<UserSkillEntity> {
+
+    void deleteByUserIdAndSkillId(Long userId, Long skillId);
 }

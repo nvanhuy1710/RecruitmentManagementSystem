@@ -2,12 +2,17 @@ package com.app.homeworkoutapplication.module.account.controller;
 
 import com.app.homeworkoutapplication.module.account.dto.RegisterRequest;
 import com.app.homeworkoutapplication.module.account.service.AccountService;
+import com.app.homeworkoutapplication.module.company.dto.Company;
 import com.app.homeworkoutapplication.module.user.dto.User;
+import com.app.homeworkoutapplication.module.usernotification.dto.UserNotification;
+import com.app.homeworkoutapplication.module.usernotification.service.QueryUserNotificationService;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -18,9 +23,12 @@ public class AccountController {
 
     private final CurrentUserUtil currentUserUtil;
 
-    public AccountController(AccountService accountService, CurrentUserUtil currentUserUtil) {
+    private final QueryUserNotificationService queryUserNotificationService;
+
+    public AccountController(AccountService accountService, CurrentUserUtil currentUserUtil, QueryUserNotificationService queryUserNotificationService) {
         this.accountService = accountService;
         this.currentUserUtil = currentUserUtil;
+        this.queryUserNotificationService = queryUserNotificationService;
     }
 
     @PostMapping("/register")
@@ -58,6 +66,28 @@ public class AccountController {
     public ResponseEntity<User> updateAccount(@RequestBody User user) {
         User result = accountService.updateAccount(user);
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/account/follow-company/{companyId}")
+    public ResponseEntity<User> updateAccount(@PathVariable("companyId") Long companyId) {
+        accountService.followCompany(companyId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/account/unfollow-company/{companyId}")
+    public ResponseEntity<User> unfollow(@PathVariable("companyId") Long companyId) {
+        accountService.unFollowCompany(companyId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/account/followed-companies")
+    public ResponseEntity<List<Company>> getFollowCompanies() {
+        return ResponseEntity.ok(accountService.getFollowedCompanies());
+    }
+
+    @GetMapping("/account/notifications")
+    public ResponseEntity<List<UserNotification>> getNoti() {
+        return ResponseEntity.ok(queryUserNotificationService.findListByUserId(currentUserUtil.getCurrentUser().getId()));
     }
 
     @PutMapping("/forgot-password/{username}")

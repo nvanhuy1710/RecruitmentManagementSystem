@@ -55,6 +55,12 @@ public class ArticleController {
         return ResponseEntity.ok(res);
     }
 
+    @PutMapping("/articles/{id}/close")
+    public ResponseEntity<Article> close(@PathVariable("id") Long id){
+        Article res = articleService.close(id);
+        return ResponseEntity.ok(res);
+    }
+
     @PutMapping("/articles/{id}/update-image")
     public ResponseEntity<Article> updateImg(@PathVariable("id") Long id,@RequestParam("file") MultipartFile file){
         articleService.updateImage(id, file);

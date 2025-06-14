@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="19" author="nvhuy">
+        <createTable tableName="article_industry">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="article_id" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="industry_id" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <createTable tableName="article_job_level">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="article_id" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="job_level_id" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <createTable tableName="article_working_model">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="article_id" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="working_model_id" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="article_id"
+                                 baseTableName="article_industry"
+                                 constraintName="fk_article_id_article_industry"
+                                 referencedColumnNames="id"
+                                 referencedTableName="article"/>
+
+        <addForeignKeyConstraint baseColumnNames="industry_id"
+                                 baseTableName="article_industry"
+                                 constraintName="fk_industry_id_article_industry"
+                                 referencedColumnNames="id"
+                                 referencedTableName="industry"/>
+
+        <addForeignKeyConstraint baseColumnNames="article_id"
+                                 baseTableName="article_job_level"
+                                 constraintName="fk_article_id_article_job_level"
+                                 referencedColumnNames="id"
+                                 referencedTableName="article"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_level_id"
+                                 baseTableName="article_job_level"
+                                 constraintName="fk_job_level_id_article_job_level"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_level"/>
+
+        <addForeignKeyConstraint baseColumnNames="article_id"
+                                 baseTableName="article_working_model"
+                                 constraintName="fk_article_id_article_working_model"
+                                 referencedColumnNames="id"
+                                 referencedTableName="article"/>
+
+        <addForeignKeyConstraint baseColumnNames="working_model_id"
+                                 baseTableName="article_working_model"
+                                 constraintName="fk_cworking_model_id_article_working_model"
+                                 referencedColumnNames="id"
+                                 referencedTableName="working_model"/>
+    </changeSet>
+</databaseChangeLog>

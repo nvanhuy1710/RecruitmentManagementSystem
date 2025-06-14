@@ -27,13 +27,7 @@
     </root>
     -->
 
-    <logger name="com.rainscales.st.eme" level="INFO"/>
-
-    <logger name="org.hibernate" level="INFO" />
-    <logger name="org.hibernate.cache" level="DEBUG" />
-    <logger name="org.hibernate.cache.internal" level="DEBUG" />
-    <logger name="org.hibernate.cache.spi" level="DEBUG" />
-    <logger name="org.hibernate.cache.spi.support" level="DEBUG" />
+    <logger name="com.app.homeworkoutapplication" level="INFO"/>
 
     <logger name="angus.activation" level="WARN"/>
     <logger name="jakarta.activation" level="WARN"/>
@@ -42,13 +36,14 @@
     <logger name="jakarta.xml.bind" level="WARN"/>
     <logger name="jdk.event.security" level="INFO"/>
     <logger name="io.github.resilience4j" level="INFO"/>
-    <logger name="com.hazelcast" level="INFO"/>
+    <logger name="org.redisson" level="WARN" />
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.config.sources.URLConfigurationSource" level="ERROR"/>
     <logger name="com.netflix.discovery" level="INFO"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
+    <logger name="io.netty" level="WARN"/>
     <logger name="io.searchbox" level="WARN"/>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>

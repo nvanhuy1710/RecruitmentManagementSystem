@@ -1,13 +1,13 @@
 package com.app.homeworkoutapplication.module.skill.service.impl;
 
-import com.app.homeworkoutapplication.entity.SkillEntity;
-import com.app.homeworkoutapplication.entity.SkillEntity_;
+import com.app.homeworkoutapplication.entity.*;
 import com.app.homeworkoutapplication.entity.mapper.SkillMapper;
 import com.app.homeworkoutapplication.module.skill.dto.Skill;
 import com.app.homeworkoutapplication.module.skill.service.QuerySkillService;
 import com.app.homeworkoutapplication.module.skill.service.criteria.SkillCriteria;
 import com.app.homeworkoutapplication.repository.SkillRepository;
 import com.app.homeworkoutapplication.web.rest.error.exception.NotFoundException;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -68,6 +68,27 @@ public class QuerySkillServiceImpl extends QueryService<SkillEntity> implements 
 
         if (criteria.getId() != null) {
             specification = specification.and(buildRangeSpecification(criteria.getId(), SkillEntity_.id));
+        }
+        if (criteria.getName() != null) {
+            specification = specification.and(buildStringSpecification(criteria.getName(), SkillEntity_.name));
+        }
+        if (criteria.getUserId() != null) {
+            specification = specification.and(
+                buildSpecification(criteria.getUserId(), root ->
+                    root.join(SkillEntity_.USER_SKILLS, JoinType.LEFT).join(UserSkillEntity_.USER, JoinType.LEFT).get(UserEntity_.ID))
+            );
+        }
+        if (criteria.getUserId() != null) {
+            specification = specification.and(
+                    buildSpecification(criteria.getUserId(), root ->
+                            root.join(SkillEntity_.USER_SKILLS, JoinType.LEFT).join(UserSkillEntity_.USER, JoinType.LEFT).get(UserEntity_.ID))
+            );
+        }
+        if (criteria.getArticleId() != null) {
+            specification = specification.and(
+                    buildSpecification(criteria.getArticleId(), root ->
+                            root.join(SkillEntity_.ARTICLE_SKILLS, JoinType.LEFT).join(ArticleSkillEntity_.ARTICLE, JoinType.LEFT).get(ArticleEntity_.ID))
+            );
         }
         if (criteria.getName() != null) {
             specification = specification.and(buildStringSpecification(criteria.getName(), SkillEntity_.name));

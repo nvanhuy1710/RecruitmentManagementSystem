@@ -11,6 +11,8 @@ public interface ArticleService {
 
     Article update(Article article);
 
+    Article close(Long id);
+
     Article approve(Long id);
 
     Article reject(Long id);

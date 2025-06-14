@@ -9,5 +9,7 @@ public interface MailService {
 
     void sendReviewApplicantResult(User user, ApplicantStatus status);
 
+    void sendApprovedArticle(User user);
+
     void sendForgotPassEmail(User user, String newPass);
 }

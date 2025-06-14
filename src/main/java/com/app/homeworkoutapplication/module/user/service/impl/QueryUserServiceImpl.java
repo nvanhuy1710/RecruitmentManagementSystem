@@ -1,15 +1,17 @@
 package com.app.homeworkoutapplication.module.user.service.impl;
 
-import com.app.homeworkoutapplication.entity.RoleEntity;
-import com.app.homeworkoutapplication.entity.RoleEntity_;
-import com.app.homeworkoutapplication.entity.UserEntity;
-import com.app.homeworkoutapplication.entity.UserEntity_;
+import com.app.homeworkoutapplication.entity.*;
+import com.app.homeworkoutapplication.entity.mapper.CompanyMapper;
 import com.app.homeworkoutapplication.entity.mapper.RoleMapper;
+import com.app.homeworkoutapplication.entity.mapper.SkillMapper;
 import com.app.homeworkoutapplication.entity.mapper.UserMapper;
 import com.app.homeworkoutapplication.module.blobstorage.service.BlobStorageService;
+import com.app.homeworkoutapplication.module.company.dto.Company;
 import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.module.user.service.QueryUserService;
 import com.app.homeworkoutapplication.module.user.service.criteria.UserCriteria;
+import com.app.homeworkoutapplication.repository.CompanyRepository;
+import com.app.homeworkoutapplication.repository.UserCompanyRepository;
 import com.app.homeworkoutapplication.repository.UserRepository;
 import com.app.homeworkoutapplication.web.rest.error.exception.NotFoundException;
 import jakarta.persistence.criteria.Join;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
 import tech.jhipster.service.filter.BooleanFilter;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,17 +34,29 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
 
     private final UserRepository userRepository;
 
+    private final CompanyRepository companyRepository;
+
+    private final UserCompanyRepository userCompanyRepository;
+
     private final BlobStorageService blobStorageService;
 
     private final UserMapper userMapper;
 
     private final RoleMapper roleMapper;
 
-    public QueryUserServiceImpl(UserRepository userRepository, BlobStorageService blobStorageService, UserMapper userMapper, RoleMapper roleMapper) {
+    private final CompanyMapper companyMapper;
+
+    private final SkillMapper skillMapper;
+
+    public QueryUserServiceImpl(UserRepository userRepository, CompanyRepository companyRepository, UserCompanyRepository userCompanyRepository, BlobStorageService blobStorageService, UserMapper userMapper, RoleMapper roleMapper, CompanyMapper companyMapper, SkillMapper skillMapper) {
         this.userRepository = userRepository;
+        this.companyRepository = companyRepository;
+        this.userCompanyRepository = userCompanyRepository;
         this.blobStorageService = blobStorageService;
         this.userMapper = userMapper;
         this.roleMapper = roleMapper;
+        this.companyMapper = companyMapper;
+        this.skillMapper = skillMapper;
     }
 
     public List<User> findListByCriteria(UserCriteria criteria) {
@@ -62,6 +77,23 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
         criteria.setEmployee(filter);
         return findListByCriteria(criteria);
     }
+
+    @Override
+    public List<User> findListFollowByCompanyId(Long id) {
+        List<UserCompanyEntity> entities = userCompanyRepository.findByCompanyId(id);
+        if(!entities.isEmpty()) {
+            return userMapper.toDto(entities.stream().map(UserCompanyEntity::getUser).toList());
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Company> getFollowedCompanies(Long userId) {
+        List<UserCompanyEntity> entities = userCompanyRepository.findByUserId(userId);
+        if(!entities.isEmpty()) {
+            return companyMapper.toDto(entities.stream().map(UserCompanyEntity::getCompany).toList());
+        }
+        return Collections.emptyList();    }
 
     public Long count(UserCriteria criteria) {
         return userRepository.count(createSpecification(criteria));
@@ -154,5 +186,8 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
             user.setAvatarUrl(blobStorageService.getUrl(user.getAvatarPath()));
         }
         user.setRoleName(entity.getRole().getName());
+        user.setSkillIds(entity.getUserSkills().stream().map(userSKill -> userSKill.getSkill().getId()).toList());
+        user.setSkills(skillMapper.toDto(entity.getUserSkills().stream().map(UserSkillEntity::getSkill).toList()));
+        user.setFollowCompanies(companyMapper.toDto(entity.getUserCompanies().stream().map(UserCompanyEntity::getCompany).toList()));
     }
 }

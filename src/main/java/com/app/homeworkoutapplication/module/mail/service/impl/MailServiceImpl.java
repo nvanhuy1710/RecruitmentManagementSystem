@@ -52,6 +52,20 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    public void sendApprovedArticle(User user) {
+        String subject = "Your followed company has posted new article";
+
+        String message = "Your followed company has posted new article, go to page to view it!";
+
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setTo(user.getEmail());
+        email.setSubject(subject);
+        email.setText(message);
+
+        mailSender.send(email);
+    }
+
+    @Override
     public void sendForgotPassEmail(User user, String newPass) {
         String subject = "Forgot Password";
         String message = "This is your new password, please don't share to anyone: " + newPass;

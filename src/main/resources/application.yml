@@ -1,6 +1,11 @@
-logging:
-  level:
-    root: INFO
+#logging:
+#  level:
+#    root: INFO
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    org.hibernate.type.descriptor.sql: TRACE
+#    org.springframework.orm.jpa: DEBUG
+#    org.springframework.transaction: DEBUG
 spring:
   session:
     timeout: 180m

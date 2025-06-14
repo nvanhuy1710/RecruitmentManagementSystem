@@ -1,13 +1,11 @@
 package com.app.homeworkoutapplication.entity;
 
-import com.app.homeworkoutapplication.entity.enumeration.Level;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -72,6 +70,12 @@ public class UserEntity implements Serializable {
 
     @OneToMany(mappedBy = "user")
     private Set<UserSkillEntity> userSkills = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserCompanyEntity> userCompanies = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserNotificationEntity> notifications = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

@@ -31,7 +31,7 @@ public class JobLevelEntity implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "jobLevel")
-    private Set<ArticleEntity> articles = new HashSet<>();
+    private Set<ArticleJobLevelEntity> articleJobLevels = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

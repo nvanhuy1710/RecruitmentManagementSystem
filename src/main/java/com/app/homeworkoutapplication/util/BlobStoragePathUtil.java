@@ -19,6 +19,8 @@ public class BlobStoragePathUtil {
 
     private String DOCUMENT_PATH = "/documents/{id}/file/";
 
+    private String COMPANY_IMAGE_PATH = "/companies/{id}/image/";
+
     public String getAvatarPath(Long id, String fileName) {
         Map<String, String> values = new HashMap<>();
         values.put("id", id.toString());
@@ -35,5 +37,10 @@ public class BlobStoragePathUtil {
         Map<String, String> values = new HashMap<>();
         values.put("id", id);
         return container + StringSubstitutor.replace(DOCUMENT_PATH, values, "{", "}") + fileName;
+    }
+    public String getCompanyImagePath(String id, String fileName) {
+        Map<String, String> values = new HashMap<>();
+        values.put("id", id);
+        return container + StringSubstitutor.replace(COMPANY_IMAGE_PATH, values, "{", "}") + fileName;
     }
 }

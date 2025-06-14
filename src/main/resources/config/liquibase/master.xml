@@ -25,4 +25,16 @@
     <include file="config/liquibase/changelog/12_drop_column_Applicant.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/13_added_column_Applicant.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/14_added_column_Applicant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/15_added_entity_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/16_added_column_Article.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/17.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/18.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/19.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/21.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/22.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/23.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/24.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/25.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/26.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
