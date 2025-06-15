@@ -1,18 +1,21 @@
 package com.app.homeworkoutapplication.module.company.service.impl;
 
+import com.app.homeworkoutapplication.entity.enumeration.CompanyStatus;
 import com.app.homeworkoutapplication.entity.mapper.CompanyMapper;
 import com.app.homeworkoutapplication.module.blobstorage.service.BlobStorageService;
 import com.app.homeworkoutapplication.module.company.dto.Company;
 import com.app.homeworkoutapplication.module.company.service.CompanyService;
 import com.app.homeworkoutapplication.module.company.service.QueryCompanyService;
-import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.repository.CompanyRepository;
 import com.app.homeworkoutapplication.util.BlobStoragePathUtil;
 import com.app.homeworkoutapplication.web.rest.error.exception.BadRequestException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Transactional
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
@@ -46,6 +49,20 @@ public class CompanyServiceImpl implements CompanyService {
         String path = blobStoragePathUtil.getCompanyImagePath(company.getId().toString(), file.getOriginalFilename());
         blobStorageService.save(file, path);
         company.setImagePath(path);
+        companyRepository.save(companyMapper.toEntity(company));
+    }
+
+    @Override
+    public void enable(Long id) {
+        Company company = queryCompanyService.getById(id);
+        company.setStatus(CompanyStatus.ENABLED);
+        companyRepository.save(companyMapper.toEntity(company));
+    }
+
+    @Override
+    public void disable(Long id) {
+        Company company = queryCompanyService.getById(id);
+        company.setStatus(CompanyStatus.DISABLED);
         companyRepository.save(companyMapper.toEntity(company));
     }
 

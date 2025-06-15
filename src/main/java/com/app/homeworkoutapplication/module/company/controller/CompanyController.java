@@ -56,6 +56,19 @@ public class CompanyController {
         return ResponseEntity.ok(res);
     }
 
+    @PutMapping("/companies/{id}/enable")
+    public ResponseEntity<Void> enable(@PathVariable("id") Long id){
+        companyService.enable(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/companies/{id}/disable")
+    public ResponseEntity<Void> disable(@PathVariable("id") Long id){
+        companyService.disable(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
     @GetMapping("/companies")
     public ResponseEntity<List<Company>> getCompanyPages(@ParameterObject CompanyCriteria criteria, @ParameterObject Pageable pageable) {
         Page<Company> page = queryCompanyService.findPageByCriteria(criteria, pageable);

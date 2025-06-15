@@ -1,5 +1,6 @@
 package com.app.homeworkoutapplication.entity;
 
+import com.app.homeworkoutapplication.entity.enumeration.CompanyStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -36,6 +37,10 @@ public class CompanyEntity {
 
     @Column(name = "location", nullable = false)
     private String location;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private CompanyStatus status;
 
     @Column(name = "description")
     private String description;

@@ -9,6 +9,10 @@ public interface CompanyService {
 
     void updateImage(Long id, MultipartFile file);
 
+    void enable(Long id);
+
+    void disable(Long id);
+
     Company update(Company company);
 
     void delete(Long id);

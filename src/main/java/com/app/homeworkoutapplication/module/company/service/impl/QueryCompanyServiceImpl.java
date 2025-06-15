@@ -98,6 +98,9 @@ public class QueryCompanyServiceImpl extends QueryService<CompanyEntity> impleme
         if (criteria.getLocation() != null) {
             specification = specification.and(buildStringSpecification(criteria.getLocation(), CompanyEntity_.location));
         }
+        if (criteria.getStatus() != null) {
+            specification = specification.and(buildSpecification(criteria.getStatus(), CompanyEntity_.status));
+        }
         return specification;
     }
 

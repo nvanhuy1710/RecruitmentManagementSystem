@@ -10,5 +10,9 @@
         <addColumn tableName="user_notification">
             <column name="company_name" type="varchar(255)" afterColumn="article_id"/>
         </addColumn>
+
+        <addColumn tableName="company">
+            <column name="status" type="varchar(255)" afterColumn="description"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

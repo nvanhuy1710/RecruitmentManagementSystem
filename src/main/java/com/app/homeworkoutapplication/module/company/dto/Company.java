@@ -1,5 +1,6 @@
 package com.app.homeworkoutapplication.module.company.dto;
 
+import com.app.homeworkoutapplication.entity.enumeration.CompanyStatus;
 import lombok.Data;
 
 @Data
@@ -17,4 +18,6 @@ public class Company {
     private String location;
 
     private String description;
+
+    private CompanyStatus status;
 }
