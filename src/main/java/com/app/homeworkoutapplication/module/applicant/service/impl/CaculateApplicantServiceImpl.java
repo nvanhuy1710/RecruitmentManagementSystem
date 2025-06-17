@@ -9,6 +9,7 @@ import com.app.homeworkoutapplication.module.article.dto.Article;
 import com.app.homeworkoutapplication.module.article.service.QueryArticleService;
 import com.app.homeworkoutapplication.module.document.dto.Document;
 import com.app.homeworkoutapplication.module.document.service.QueryDocumentService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +19,16 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 @Service
 public class CaculateApplicantServiceImpl implements CaculateApplicantService {
@@ -33,6 +40,10 @@ public class CaculateApplicantServiceImpl implements CaculateApplicantService {
     private final QueryDocumentService queryDocumentService;
 
     private final ApplicantService applicantService;
+
+    private String ALGORITHM = "AES";
+
+    private String KEY = "1f4fhg42od2MdS34gg2ksoe8@ks45y6j";
 
     public CaculateApplicantServiceImpl(QueryApplicantService queryApplicantService, QueryArticleService queryArticleService, QueryDocumentService queryDocumentService, ApplicantService applicantService) {
         this.queryApplicantService = queryApplicantService;
@@ -74,7 +85,7 @@ public class CaculateApplicantServiceImpl implements CaculateApplicantService {
             }
 
             HttpHeaders headers = new HttpHeaders();
-            headers.set("X-API-Key", "secret-api-key-match-score");
+            headers.set("X-API-Key", encrypt("secret-api-key-match-score"));
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData, headers);
@@ -100,5 +111,14 @@ public class CaculateApplicantServiceImpl implements CaculateApplicantService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String encrypt(String data) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        SecretKeySpec keySpec = new SecretKeySpec(KEY.getBytes(), ALGORITHM);
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(1, keySpec);
+        byte[] encryptedBytes = cipher.doFinal(data.getBytes());
+        String param = Base64.getEncoder().encodeToString(encryptedBytes);
+        return URLEncoder.encode(param, StandardCharsets.UTF_8);
     }
 }
