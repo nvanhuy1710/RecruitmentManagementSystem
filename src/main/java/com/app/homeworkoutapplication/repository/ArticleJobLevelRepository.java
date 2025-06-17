@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ArticleJobLevelRepository extends JpaRepository<ArticleJobLevelEntity, Long>, JpaSpecificationExecutor<ArticleJobLevelEntity> {
     void deleteByArticleIdAndJobLevelId(Long articleId, Long jobLevelId);
 
+    List<ArticleJobLevelEntity> findByArticleId(Long articleId);
 } 

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -143,10 +144,11 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.deleteById(id);
     }
 
-    private void saveIndustry(Long articleId, List<Long> industryIds) {
-        Article article = queryArticleService.getById(articleId);
-
-        Set<Long> currentIds = article.getIndustryIds() != null ? new HashSet<>(article.getIndustryIds()) : Collections.emptySet();
+    public void saveIndustry(Long articleId, List<Long> industryIds) {
+        Set<Long> currentIds = articleIndustryRepository.findByArticleId(articleId)
+            .stream()
+            .map(entity -> entity.getIndustry().getId())
+            .collect(Collectors.toSet());
 
         Set<Long> newIds = new HashSet<>(industryIds);
 
@@ -176,10 +178,11 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
-    private void saveJobLevel(Long articleId, List<Long> industryIds) {
-        Article article = queryArticleService.getById(articleId);
-
-        Set<Long> currentIds = article.getJobLevelIds() != null ? new HashSet<>(article.getJobLevelIds()) : Collections.emptySet();
+    public void saveJobLevel(Long articleId, List<Long> industryIds) {
+        Set<Long> currentIds = articleJobLevelRepository.findByArticleId(articleId)
+                .stream()
+                .map(entity -> entity.getJobLevel().getId())
+                .collect(Collectors.toSet());
 
         Set<Long> newIds = new HashSet<>(industryIds);
 
@@ -209,10 +212,11 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
-    private void saveWorkingModel(Long articleId, List<Long> industryIds) {
-        Article article = queryArticleService.getById(articleId);
-
-        Set<Long> currentIds = article.getWorkingModelIds() != null ? new HashSet<>(article.getWorkingModelIds()) : Collections.emptySet();
+    public void saveWorkingModel(Long articleId, List<Long> industryIds) {
+        Set<Long> currentIds = articleWorkingModelRepository.findByArticleId(articleId)
+                .stream()
+                .map(entity -> entity.getWorkingModel().getId())
+                .collect(Collectors.toSet());
 
         Set<Long> newIds = new HashSet<>(industryIds);
 
@@ -242,10 +246,11 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
-    private void saveSkill(Long articleId, List<Long> skillIds) {
-        Article article = queryArticleService.getById(articleId);
-
-        Set<Long> currentIds = article.getSkillIds() != null ? new HashSet<>(article.getSkillIds()) : Collections.emptySet();
+    public void saveSkill(Long articleId, List<Long> skillIds) {
+        Set<Long> currentIds = articleSkillRepository.findByArticleId(articleId)
+                .stream()
+                .map(entity -> entity.getSkill().getId())
+                .collect(Collectors.toSet());
 
         Set<Long> newIds = new HashSet<>(skillIds);
 

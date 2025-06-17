@@ -15,7 +15,6 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "working_model")
-@ToString
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class WorkingModelEntity implements Serializable {
 
@@ -44,5 +43,13 @@ public class WorkingModelEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "WorkingModelEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

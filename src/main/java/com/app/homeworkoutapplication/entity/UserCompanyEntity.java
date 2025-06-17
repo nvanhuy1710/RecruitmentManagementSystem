@@ -11,7 +11,6 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "user_company")
-@ToString
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserCompanyEntity implements Serializable {
 
@@ -30,4 +29,12 @@ public class UserCompanyEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private CompanyEntity company;
+
+
+    @Override
+    public String toString() {
+        return "UserCompanyEntity{" +
+                "id=" + id +
+                '}';
+    }
 }

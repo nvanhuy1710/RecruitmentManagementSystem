@@ -19,7 +19,6 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "applicant")
-@ToString
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ApplicantEntity implements Serializable {
 
@@ -82,5 +81,19 @@ public class ApplicantEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, fullName, phone, coverLetter, status, createdDate, lastModifiedDate);
+    }
+
+    @Override
+    public String toString() {
+        return "ApplicantEntity{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", coverLetter='" + coverLetter + '\'' +
+                ", matchScore=" + matchScore +
+                ", status=" + status +
+                ", createdDate=" + createdDate +
+                ", lastModifiedDate=" + lastModifiedDate +
+                '}';
     }
 }

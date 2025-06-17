@@ -15,7 +15,6 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "industry")
-@ToString
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class IndustryEntity implements Serializable {
 
@@ -48,6 +47,15 @@ public class IndustryEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description);
+    }
+
+    @Override
+    public String toString() {
+        return "IndustryEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
 

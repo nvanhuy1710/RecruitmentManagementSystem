@@ -3,6 +3,8 @@ package com.app.homeworkoutapplication.module.article.service;
 import com.app.homeworkoutapplication.module.article.dto.Article;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface ArticleService {
 
     Article create(Article article, MultipartFile file);

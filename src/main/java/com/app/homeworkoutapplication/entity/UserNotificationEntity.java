@@ -11,7 +11,6 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "user_notification")
-@ToString
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserNotificationEntity implements Serializable {
 
@@ -48,5 +47,16 @@ public class UserNotificationEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, articleId, viewed);
+    }
+
+    @Override
+    public String toString() {
+        return "UserNotificationEntity{" +
+                "id=" + id +
+                ", articleId=" + articleId +
+                ", companyName='" + companyName + '\'' +
+                ", data='" + data + '\'' +
+                ", viewed=" + viewed +
+                '}';
     }
 }

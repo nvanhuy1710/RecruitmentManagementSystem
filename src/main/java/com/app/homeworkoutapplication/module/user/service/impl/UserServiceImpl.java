@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -127,10 +128,11 @@ public class UserServiceImpl implements UserService {
         } catch (NotFoundException ignored) { }
     }
 
-    private void saveSkill(Long userId, List<Long> skillIds) {
-        User user = queryUserService.findById(userId);
-
-        Set<Long> currentIds = user.getSkillIds() != null ? new HashSet<>(user.getSkillIds()) : Collections.emptySet();
+    public void saveSkill(Long userId, List<Long> skillIds) {
+        Set<Long> currentIds = userSkillRepository.findByUserId(userId)
+                .stream()
+                .map(entity -> entity.getSkill().getId())
+                .collect(Collectors.toSet());
 
         Set<Long> newIds = new HashSet<>(skillIds);
 

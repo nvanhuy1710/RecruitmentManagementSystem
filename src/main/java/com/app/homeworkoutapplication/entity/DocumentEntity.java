@@ -13,7 +13,6 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "document")
-@ToString
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DocumentEntity implements Serializable {
 
@@ -48,5 +47,14 @@ public class DocumentEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, filePath);
+    }
+
+    @Override
+    public String toString() {
+        return "DocumentEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", filePath='" + filePath + '\'' +
+                '}';
     }
 }

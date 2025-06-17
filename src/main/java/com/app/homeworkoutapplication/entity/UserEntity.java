@@ -58,11 +58,11 @@ public class UserEntity implements Serializable {
     @Column(name = "is_activated", nullable = false)
     private Boolean isActivated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private RoleEntity role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<ArticleEntity> articles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")

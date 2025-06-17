@@ -19,7 +19,6 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "article")
-@ToString
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ArticleEntity implements Serializable {
 
@@ -102,5 +101,22 @@ public class ArticleEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, mainImagePath, content, requirement, company, fromSalary, toSalary, dueDate, status);
+    }
+
+    @Override
+    public String toString() {
+        return "ArticleEntity{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", mainImagePath='" + mainImagePath + '\'' +
+                ", content='" + content + '\'' +
+                ", requirement='" + requirement + '\'' +
+                ", fromSalary=" + fromSalary +
+                ", toSalary=" + toSalary +
+                ", dueDate=" + dueDate +
+                ", status=" + status +
+                ", createdDate=" + createdDate +
+                ", lastModifiedDate=" + lastModifiedDate +
+                '}';
     }
 }

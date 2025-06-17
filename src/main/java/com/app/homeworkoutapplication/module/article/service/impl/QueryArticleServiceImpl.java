@@ -14,6 +14,8 @@ import io.jsonwebtoken.lang.Collections;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true, noRollbackFor = Exception.class)
 public class QueryArticleServiceImpl extends QueryService<ArticleEntity> implements QueryArticleService {
+
+    private final Logger log = LoggerFactory.getLogger(QueryArticleServiceImpl.class);
 
     private final ArticleRepository articleRepository;
 

@@ -18,4 +18,11 @@ public class ArticleIndustryEntity {
     @ManyToOne
     @JoinColumn(name = "industry_id")
     private IndustryEntity industry;
+
+    @Override
+    public String toString() {
+        return "ArticleIndustryEntity{" +
+                "id=" + id +
+                '}';
+    }
 }

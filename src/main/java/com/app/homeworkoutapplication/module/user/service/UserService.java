@@ -1,6 +1,5 @@
 package com.app.homeworkoutapplication.module.user.service;
 
-import com.app.homeworkoutapplication.module.company.dto.Company;
 import com.app.homeworkoutapplication.module.user.dto.User;
 
 import java.util.List;

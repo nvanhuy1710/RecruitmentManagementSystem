@@ -12,7 +12,6 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "user_skill")
-@ToString
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserSkillEntity implements Serializable {
 
@@ -43,5 +42,12 @@ public class UserSkillEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "UserSkillEntity{" +
+                "id=" + id +
+                '}';
     }
 }
