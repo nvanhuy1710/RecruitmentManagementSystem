@@ -63,7 +63,7 @@ public class ApplicantController {
 
     @GetMapping("/applicants/{articleId}/match-score")
 //    @PreAuthorize("hasAnyAuthority('" + AuthorityConstant.EMPLOYER + "', '" + AuthorityConstant.ADMIN + "')")
-    public ResponseEntity<Void> caculateMatchScore(@PathVariable Long articleId) {
+    public ResponseEntity<Void> caculateMatchScore(@PathVariable("articleId") Long articleId) {
         caculateApplicantService.caculateMatchScore(articleId);
         return ResponseEntity.noContent().build();
     }

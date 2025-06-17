@@ -74,6 +74,7 @@ public class CaculateApplicantServiceImpl implements CaculateApplicantService {
             }
 
             HttpHeaders headers = new HttpHeaders();
+            headers.set("X-API-Key", "secret-api-key-match-score");
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData, headers);
