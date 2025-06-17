@@ -164,6 +164,9 @@ public class QueryUserServiceImpl extends QueryService<UserEntity> implements Qu
         if (criteria.getEmployee() != null) {
             specification = specification.and(specFindEmployee(criteria.getEmployee()));
         }
+        if (criteria.getLocked() != null) {
+            specification = specification.and(buildSpecification(criteria.getLocked(), UserEntity_.locked));
+        }
 
         return specification;
     }

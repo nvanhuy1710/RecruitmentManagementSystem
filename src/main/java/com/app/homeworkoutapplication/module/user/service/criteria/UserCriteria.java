@@ -21,5 +21,7 @@ public class UserCriteria implements Serializable {
 
     private BooleanFilter employee;
 
+    private BooleanFilter locked;
+
     private InstantFilter birth;
 }

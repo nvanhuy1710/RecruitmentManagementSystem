@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
             existUser.setFullName(user.getFullName());
             existUser.setBirth(user.getBirth());
             existUser.setGender(user.getGender());
+            existUser.setLocked(false);
             saveSkill(existUser.getId(), user.getSkillIds());
             return userMapper.toDto(userRepository.save(userMapper.toEntity(existUser)));
         }
@@ -110,6 +111,20 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(Long userId, String newPass) {
         User existUser = queryUserService.findById(userId);
         existUser.setPassword(newPass);
+        userRepository.save(userMapper.toEntity(existUser));
+    }
+
+    @Override
+    public void lockUser(Long userId) {
+        User existUser = queryUserService.findById(userId);
+        existUser.setLocked(true);
+        userRepository.save(userMapper.toEntity(existUser));
+    }
+
+    @Override
+    public void unLockUser(Long userId) {
+        User existUser = queryUserService.findById(userId);
+        existUser.setLocked(false);
         userRepository.save(userMapper.toEntity(existUser));
     }
 

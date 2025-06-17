@@ -29,6 +29,8 @@ public class User {
 
     private Boolean isActivated;
 
+    private Boolean locked;
+
     private String avatarPath;
 
     private String avatarUrl;

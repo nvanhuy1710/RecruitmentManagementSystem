@@ -58,6 +58,9 @@ public class UserEntity implements Serializable {
     @Column(name = "is_activated", nullable = false)
     private Boolean isActivated;
 
+    @Column(name = "locked")
+    private Boolean locked;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private RoleEntity role;

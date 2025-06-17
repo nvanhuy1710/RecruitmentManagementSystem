@@ -14,5 +14,9 @@
         <addColumn tableName="company">
             <column name="status" type="varchar(255)" afterColumn="description"/>
         </addColumn>
+
+        <addColumn tableName="user">
+            <column name="locked" type="boolean" afterColumn="is_activated"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

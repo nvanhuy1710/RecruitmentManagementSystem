@@ -28,6 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (!user.get().getIsActivated()) {
             throw new RuntimeException("User not activated: " + username);
         }
+        if (user.get().getLocked()) {
+            throw new RuntimeException("User is locked: " + username);
+        }
         return new CustomUserDetail(user.get());
     }
 }

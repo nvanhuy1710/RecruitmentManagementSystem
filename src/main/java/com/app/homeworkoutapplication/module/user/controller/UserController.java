@@ -48,6 +48,24 @@ public class UserController {
         return ResponseEntity.ok(res);
     }
 
+    @PutMapping("/users/{id}/lock")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<Void> lock(
+            @Parameter(description = "ID of the user to be lock", required = true)
+            @PathVariable("id") Long id){
+        userService.lockUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/users/{id}/unlock")
+    @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
+    public ResponseEntity<Void> unlock(
+            @Parameter(description = "ID of the user to be unlock", required = true)
+            @PathVariable("id") Long id){
+        userService.unLockUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/users/{id}/role")
     @PreAuthorize("hasAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<User> updateRole(
