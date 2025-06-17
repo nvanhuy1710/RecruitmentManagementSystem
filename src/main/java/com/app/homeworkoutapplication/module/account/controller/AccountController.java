@@ -2,15 +2,22 @@ package com.app.homeworkoutapplication.module.account.controller;
 
 import com.app.homeworkoutapplication.module.account.dto.RegisterRequest;
 import com.app.homeworkoutapplication.module.account.service.AccountService;
+import com.app.homeworkoutapplication.module.article.dto.Article;
 import com.app.homeworkoutapplication.module.company.dto.Company;
 import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.module.usernotification.dto.UserNotification;
 import com.app.homeworkoutapplication.module.usernotification.service.QueryUserNotificationService;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.PaginationUtil;
 
 import java.util.List;
 
@@ -86,8 +93,15 @@ public class AccountController {
     }
 
     @GetMapping("/account/notifications")
-    public ResponseEntity<List<UserNotification>> getNoti() {
-        return ResponseEntity.ok(queryUserNotificationService.findListByUserId(currentUserUtil.getCurrentUser().getId()));
+    public ResponseEntity<List<UserNotification>> getNoti(Pageable pageable) {
+        Page<UserNotification> page = queryUserNotificationService.findByUserId(currentUserUtil.getCurrentUser().getId(), pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/account/notifications/count")
+    public ResponseEntity<Long> countUnViewNoti() {
+        return ResponseEntity.ok(queryUserNotificationService.countByUserId(currentUserUtil.getCurrentUser().getId()));
     }
 
     @PutMapping("/forgot-password/{username}")

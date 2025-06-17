@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.LongFilter;
 
 import java.util.List;
@@ -46,14 +47,27 @@ public class QueryUserNotificationServiceImpl extends QueryService<UserNotificat
     }
 
     @Override
-    public List<UserNotification> findListByUserId(Long userId) {
+    public Page<UserNotification> findByUserId(Long userId, Pageable pageable) {
         UserNotificationCriteria criteria = new UserNotificationCriteria();
         LongFilter filter = new LongFilter();
         filter.setEquals(userId);
         criteria.setUserId(filter);
-        return findListByCriteria(criteria);
+        return findPageByCriteria(criteria, pageable);
     }
 
+    @Override
+    public long countByUserId(Long userId) {
+        UserNotificationCriteria criteria = new UserNotificationCriteria();
+        LongFilter filter = new LongFilter();
+        filter.setEquals(userId);
+        criteria.setUserId(filter);
+
+        BooleanFilter viewFilter = new BooleanFilter();
+        viewFilter.setEquals(false);
+        criteria.setViewed(viewFilter);
+
+        return userNotificationRepository.count(createSpecification(criteria));
+    }
     @Override
     public Page<UserNotification> findPageByCriteria(UserNotificationCriteria criteria, Pageable pageable) {
         Page<UserNotificationEntity> page =  userNotificationRepository.findAll(createSpecification(criteria), pageable);
@@ -89,7 +103,9 @@ public class QueryUserNotificationServiceImpl extends QueryService<UserNotificat
             specification = specification.and(buildSpecification(criteria.getUserId(),
                     notificationEntityRoot -> notificationEntityRoot.join(UserNotificationEntity_.user).get(UserEntity_.id)));
         }
-
+        if (criteria.getViewed() != null) {
+            specification = specification.and(buildSpecification(criteria.getViewed(), UserNotificationEntity_.viewed));
+        }
         return specification;
     }
 

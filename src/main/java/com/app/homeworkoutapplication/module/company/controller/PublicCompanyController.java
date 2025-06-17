@@ -25,7 +25,6 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/public/api")
-@SecurityRequirement(name = "Authentication")
 public class PublicCompanyController {
 
     private final QueryCompanyService queryCompanyService;
@@ -59,7 +58,7 @@ public class PublicCompanyController {
     }
 
     private void filterByRole(CompanyCriteria criteria) {
-        if(!Objects.equals(currentUserUtil.getCurrentUser().getRoleName(), "ADMIN")) {
+        if(currentUserUtil.getCurrentUser() == null || !Objects.equals(currentUserUtil.getCurrentUser().getRoleName(), "ADMIN")) {
             CompanyStatusFilter filter = new CompanyStatusFilter();
             filter.setEquals(CompanyStatus.ENABLED);
             criteria.setStatus(filter);

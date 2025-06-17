@@ -11,7 +11,9 @@ public interface QueryUserNotificationService {
 
     List<UserNotification> findListByCriteria(UserNotificationCriteria criteria);
 
-    List<UserNotification> findListByUserId(Long userId);
+    Page<UserNotification> findByUserId(Long userId, Pageable pageable);
+
+    long countByUserId(Long userId);
 
     Page<UserNotification> findPageByCriteria(UserNotificationCriteria criteria, Pageable pageable);
 

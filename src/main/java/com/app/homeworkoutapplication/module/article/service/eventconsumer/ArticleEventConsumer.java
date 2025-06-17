@@ -55,7 +55,6 @@ public class ArticleEventConsumer {
                 notification.setData(objectMapper.writeValueAsString(article));
             } catch (JsonProcessingException e) {
                 System.out.println("Error serializing article data: " + e.getMessage());
-                // Không throw exception để tránh ảnh hưởng đến luồng chính
             }
             notification.setViewed(false);
 
