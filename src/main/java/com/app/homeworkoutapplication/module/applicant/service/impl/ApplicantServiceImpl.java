@@ -3,6 +3,7 @@ package com.app.homeworkoutapplication.module.applicant.service.impl;
 import com.app.homeworkoutapplication.entity.enumeration.ApplicantStatus;
 import com.app.homeworkoutapplication.entity.mapper.ApplicantMapper;
 import com.app.homeworkoutapplication.module.applicant.dto.Applicant;
+import com.app.homeworkoutapplication.module.applicant.dto.event.ApplicantCreatedEvent;
 import com.app.homeworkoutapplication.module.applicant.service.ApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.QueryApplicantService;
 import com.app.homeworkoutapplication.module.document.dto.Document;
@@ -13,14 +14,16 @@ import com.app.homeworkoutapplication.repository.ApplicantRepository;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import com.app.homeworkoutapplication.web.rest.error.exception.BadRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class ApplicantServiceImpl implements ApplicantService {
 
     private final ApplicantRepository applicantRepository;
@@ -31,8 +34,9 @@ public class ApplicantServiceImpl implements ApplicantService {
     private final QueryUserService queryUserService;
     private final MailService mailService;
     private final ObjectMapper objectMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicantMapper applicantMapper, QueryApplicantService queryApplicantService, DocumentService documentService, CurrentUserUtil currentUserUtil, QueryUserService queryUserService, MailService mailService, ObjectMapper objectMapper) {
+    public ApplicantServiceImpl(ApplicantRepository applicantRepository, ApplicantMapper applicantMapper, QueryApplicantService queryApplicantService, DocumentService documentService, CurrentUserUtil currentUserUtil, QueryUserService queryUserService, MailService mailService, ObjectMapper objectMapper, ApplicationEventPublisher applicationEventPublisher) {
         this.applicantRepository = applicantRepository;
         this.applicantMapper = applicantMapper;
         this.queryApplicantService = queryApplicantService;
@@ -41,6 +45,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         this.queryUserService = queryUserService;
         this.mailService = mailService;
         this.objectMapper = objectMapper;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -61,6 +66,8 @@ public class ApplicantServiceImpl implements ApplicantService {
             document.setApplicantId(result.getId());
             documentService.create(document, file);
         }
+
+        applicationEventPublisher.publishEvent(new ApplicantCreatedEvent(this, result));
 
         return result;
     }

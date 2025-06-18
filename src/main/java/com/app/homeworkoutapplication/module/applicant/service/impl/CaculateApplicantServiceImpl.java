@@ -70,15 +70,12 @@ public class CaculateApplicantServiceImpl implements CaculateApplicantService {
             payload.put(document.getId(), document.getFileUrl());
         }
 
-        // Gọi API
         try {
             RestTemplate restTemplate = new RestTemplate();
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
 
-            // Thêm job_description
             formData.add("job_description", article.getRequirement());
 
-            // Thêm các urls và cv_ids
             for (Map.Entry<Long, String> entry : payload.entrySet()) {
                 formData.add("cv_ids", entry.getKey().toString());
                 formData.add("urls", entry.getValue());
@@ -105,6 +102,60 @@ public class CaculateApplicantServiceImpl implements CaculateApplicantService {
                 for (Applicant applicant : applicants) {
                     applicantService.updateScore(applicant.getId(), applicant.getMatchScore());
                 }
+            } else {
+                System.err.println("Match URL API call failed with status: " + response.getStatusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void caculateMatchScoreByApplicantId(Long applicantId) {
+        Applicant applicant = queryApplicantService.getById(applicantId);
+
+        Article article = queryArticleService.getById(applicant.getArticleId());
+
+        if(article.getAutoCaculate() == null || ! article.getAutoCaculate()) {
+            return;
+        }
+
+        List<Document> documents = queryDocumentService.findByApplicantId(applicantId);
+
+        Map<Long, String> payload = new HashMap<>();
+
+        for (Document document : documents) {
+            payload.put(document.getId(), document.getFileUrl());
+        }
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
+
+            formData.add("job_description", article.getRequirement());
+
+            for (Map.Entry<Long, String> entry : payload.entrySet()) {
+                formData.add("cv_ids", entry.getKey().toString());
+                formData.add("urls", entry.getValue());
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("X-API-Key", encrypt("secret-api-key-match-score"));
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData, headers);
+
+            ResponseEntity<MatchScore> response = restTemplate.postForEntity(
+                    "http://localhost:5000/api/match-url", requestEntity, MatchScore.class
+            );
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                for(Map.Entry<Long, Double> result : response.getBody().getResults().entrySet()) {
+                    if (applicant.getMatchScore() == null || applicant.getMatchScore() < result.getValue()) {
+                        applicant.setMatchScore(result.getValue());
+                    }
+                }
+                applicantService.updateScore(applicant.getId(), applicant.getMatchScore());
             } else {
                 System.err.println("Match URL API call failed with status: " + response.getStatusCode());
             }

@@ -5,9 +5,11 @@ import com.app.homeworkoutapplication.entity.ApplicantEntity_;
 import com.app.homeworkoutapplication.entity.DocumentEntity;
 import com.app.homeworkoutapplication.entity.DocumentEntity_;
 import com.app.homeworkoutapplication.entity.mapper.DocumentMapper;
+import com.app.homeworkoutapplication.module.blobstorage.service.BlobStorageService;
 import com.app.homeworkoutapplication.module.document.dto.Document;
 import com.app.homeworkoutapplication.module.document.service.QueryDocumentService;
 import com.app.homeworkoutapplication.module.document.service.criteria.DocumentCriteria;
+import com.app.homeworkoutapplication.module.user.dto.User;
 import com.app.homeworkoutapplication.repository.DocumentRepository;
 import com.app.homeworkoutapplication.web.rest.error.exception.NotFoundException;
 import jakarta.persistence.criteria.Join;
@@ -32,20 +34,32 @@ public class QueryDocumentServiceImpl extends QueryService<DocumentEntity> imple
 
     private final DocumentMapper documentMapper;
 
+    private final BlobStorageService blobStorageService;
 
-    public QueryDocumentServiceImpl(DocumentRepository documentRepository, DocumentMapper documentMapper) {
+    public QueryDocumentServiceImpl(DocumentRepository documentRepository, DocumentMapper documentMapper, BlobStorageService blobStorageService) {
         this.documentRepository = documentRepository;
         this.documentMapper = documentMapper;
+        this.blobStorageService = blobStorageService;
     }
 
     public List<Document> findListByCriteria(DocumentCriteria criteria) {
-        return documentRepository.findAll(createSpecification(criteria)).stream().map(documentMapper::toDto).toList();
+        return documentRepository.findAll(createSpecification(criteria)).stream().map(
+                entity -> {
+                    Document document = documentMapper.toDto(entity);
+                    fetchData(entity, document);
+                    return document;
+                }
+        ).toList();
     }
 
     public Page<Document> findPageByCriteria(DocumentCriteria criteria, Pageable pageable) {
         Page<DocumentEntity> page =  documentRepository.findAll(createSpecification(criteria), pageable);
         return new PageImpl<>(
-                page.getContent().stream().map(documentMapper::toDto).toList(),
+                page.getContent().stream().map(entity -> {
+                    Document document = documentMapper.toDto(entity);
+                    fetchData(entity, document);
+                    return document;
+                }).toList(),
                 pageable,
                 page.getTotalElements()
         );
@@ -65,7 +79,9 @@ public class QueryDocumentServiceImpl extends QueryService<DocumentEntity> imple
         if (documentEntity.isEmpty()) {
             throw new NotFoundException("Not found document by id " + id);
         }
-        return documentMapper.toDto(documentEntity.get());
+        Document document = documentMapper.toDto(documentEntity.get());
+        fetchData(documentEntity.get(), document);
+        return document;
     }
 
     public Document getByName(String name) {
@@ -73,7 +89,9 @@ public class QueryDocumentServiceImpl extends QueryService<DocumentEntity> imple
         if (documentEntity.isEmpty()) {
             throw new NotFoundException("Not found document by name " + name);
         }
-        return documentMapper.toDto(documentEntity.get());
+        Document document = documentMapper.toDto(documentEntity.get());
+        fetchData(documentEntity.get(), document);
+        return document;
     }
 
 
@@ -111,5 +129,11 @@ public class QueryDocumentServiceImpl extends QueryService<DocumentEntity> imple
             };
         }
         return null;
+    }
+
+    private void fetchData(DocumentEntity entity, Document document) {
+        if(entity.getFilePath() != null) {
+            document.setFileUrl(blobStorageService.getUrl(entity.getFilePath()));
+        }
     }
 }

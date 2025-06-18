@@ -173,6 +173,9 @@ public class QueryArticleServiceImpl extends QueryService<ArticleEntity> impleme
         if (criteria.getStatus() != null) {
             specification = specification.and(buildSpecification(criteria.getStatus(), ArticleEntity_.status));
         }
+        if (criteria.getAutoCaculate() != null) {
+            specification = specification.and(buildSpecification(criteria.getAutoCaculate(), ArticleEntity_.autoCaculate));
+        }
         if (criteria.getCompanyId() != null) {
             specification = specification.and(buildSpecification(criteria.getCompanyId(),
                     articleEntityRoot -> articleEntityRoot.join(ArticleEntity_.company).get(CompanyEntity_.id)));

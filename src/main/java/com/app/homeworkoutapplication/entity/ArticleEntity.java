@@ -70,6 +70,9 @@ public class ArticleEntity implements Serializable {
     @Column(name = "last_modified_date")
     private Instant lastModifiedDate = Instant.now();
 
+    @Column(name = "auto_caculate")
+    private Boolean autoCaculate;
+
     @OneToMany(mappedBy = "article")
     private Set<ArticleIndustryEntity> industries = new HashSet<>();
 

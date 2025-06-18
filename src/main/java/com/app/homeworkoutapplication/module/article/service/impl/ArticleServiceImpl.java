@@ -68,6 +68,10 @@ public class ArticleServiceImpl implements ArticleService {
         article.setUserId(currentUserUtil.getCurrentUser().getId());
         article.setStatus(ArticleStatus.PENDING);
 
+        if(article.getAutoCaculate() == null) {
+            article.setAutoCaculate(false);
+        }
+
         String path = blobStoragePathUtil.getArticlePath(UUID.randomUUID().toString(), file.getOriginalFilename());
         blobStorageService.save(file, path);
         article.setMainImagePath(path);

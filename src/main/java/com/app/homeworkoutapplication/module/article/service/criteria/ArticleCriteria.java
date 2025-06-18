@@ -2,10 +2,7 @@ package com.app.homeworkoutapplication.module.article.service.criteria;
 
 import com.app.homeworkoutapplication.entity.filter.ArticleStatusFilter;
 import lombok.Data;
-import tech.jhipster.service.filter.InstantFilter;
-import tech.jhipster.service.filter.IntegerFilter;
-import tech.jhipster.service.filter.LongFilter;
-import tech.jhipster.service.filter.StringFilter;
+import tech.jhipster.service.filter.*;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -18,6 +15,7 @@ public class ArticleCriteria implements Serializable {
     private LongFilter salary;
     private InstantFilter dueDate;
     private ArticleStatusFilter status;
+    private BooleanFilter autoCaculate;
     private LongFilter companyId;
     private LongFilter industryId;
     private LongFilter jobLevelId;

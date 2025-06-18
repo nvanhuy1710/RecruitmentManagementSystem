@@ -5,11 +5,12 @@ import com.app.homeworkoutapplication.module.article.dto.Article;
 import com.app.homeworkoutapplication.module.document.dto.Document;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
 @Data
-public class Applicant {
+public class Applicant implements Serializable {
     private Long id;
     private String fullName;
     private String phone;
