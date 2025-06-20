@@ -2,6 +2,7 @@ package com.app.homeworkoutapplication.module.usernotification.service.eventcons
 
 import com.app.homeworkoutapplication.module.usernotification.dto.event.UserNotificationCreatedEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -14,6 +15,7 @@ public class UserNotificationEventConsumer {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
+    @Async("eventTaskExecutor")
     @TransactionalEventListener
     public void handleEvent(UserNotificationCreatedEvent event) {
         try {

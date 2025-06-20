@@ -18,7 +18,7 @@ public class UserNotificationController {
     }
 
     @PutMapping("/notifications/{id}/update-viewed")
-    public ResponseEntity<Void> create(@PathVariable Long id) throws URISyntaxException {
+    public ResponseEntity<Void> create(@PathVariable("id") Long id) throws URISyntaxException {
         userNotificationService.updateViewed(id);
         return ResponseEntity.noContent().build();
     }

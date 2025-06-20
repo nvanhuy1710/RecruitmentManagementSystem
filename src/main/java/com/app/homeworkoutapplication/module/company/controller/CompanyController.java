@@ -44,7 +44,7 @@ public class CompanyController {
     }
 
     @PutMapping("/companies/{id}/update-image")
-    public ResponseEntity<Void> create(@PathVariable Long id,@RequestParam("file")  MultipartFile file) throws URISyntaxException {
+    public ResponseEntity<Void> create(@PathVariable("id") Long id,@RequestParam("file")  MultipartFile file) throws URISyntaxException {
         companyService.updateImage(id, file);
         return ResponseEntity.noContent().build();
     }

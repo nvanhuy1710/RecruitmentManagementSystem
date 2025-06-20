@@ -90,14 +90,14 @@ public class ApplicantController {
 
     @PutMapping("/applicants/{id}/accept")
     @PreAuthorize("hasAnyAuthority('" + AuthorityConstant.EMPLOYER + "', '" + AuthorityConstant.ADMIN + "')")
-    public ResponseEntity<Void> acceptApplicant(@PathVariable Long id) {
+    public ResponseEntity<Void> acceptApplicant(@PathVariable("id") Long id) {
         applicantService.accept(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/applicants/{id}/decline")
     @PreAuthorize("hasAnyAuthority('" + AuthorityConstant.EMPLOYER + "', '" + AuthorityConstant.ADMIN + "')")
-    public ResponseEntity<List<Applicant>> declineApplicant(@PathVariable Long id) {
+    public ResponseEntity<List<Applicant>> declineApplicant(@PathVariable("id") Long id) {
         applicantService.decline(id);
         return ResponseEntity.noContent().build();
     }

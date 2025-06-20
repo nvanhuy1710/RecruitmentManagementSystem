@@ -21,17 +21,17 @@ public class DashboardController {
     }
 
     @GetMapping("/count/article-date/{year}")
-    public ResponseEntity<List<ArticleStatisticImpl>> count(@PathVariable int year) throws URISyntaxException {
+    public ResponseEntity<List<ArticleStatisticImpl>> count(@PathVariable("year") int year) throws URISyntaxException {
         return ResponseEntity.ok(queryDashboardService.statisticArticles(year));
     }
 
     @GetMapping("/count/applicant-date/{year}")
-    public ResponseEntity<List<ApplicantStatisticImpl>> countMore(@PathVariable int year) throws URISyntaxException {
+    public ResponseEntity<List<ApplicantStatisticImpl>> countMore(@PathVariable("year") int year) throws URISyntaxException {
         return ResponseEntity.ok(queryDashboardService.statisticApplicants(year));
     }
 
     @GetMapping("/count/article-company/{year}")
-    public ResponseEntity<List<ArticleCompanyStatisticImpl>> countMoreMore(@PathVariable int year) throws URISyntaxException {
+    public ResponseEntity<List<ArticleCompanyStatisticImpl>> countMoreMore(@PathVariable("year") int year) throws URISyntaxException {
         return ResponseEntity.ok(queryDashboardService.statisticArticleCompanies(year));
     }
 }

@@ -9,6 +9,7 @@ import com.app.homeworkoutapplication.module.usernotification.dto.UserNotificati
 import com.app.homeworkoutapplication.module.usernotification.service.UserNotificationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -37,6 +38,7 @@ public class ArticleEventConsumer {
         this.objectMapper = objectMapper;
     }
 
+    @Async("eventTaskExecutor")
     @TransactionalEventListener
     public void handleEvent(ApproveArticleEvent event) {
         Article article = event.getEventData();

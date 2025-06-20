@@ -2,6 +2,7 @@ package com.app.homeworkoutapplication.module.applicant.service.eventconsumer;
 
 import com.app.homeworkoutapplication.module.applicant.dto.event.ApplicantCreatedEvent;
 import com.app.homeworkoutapplication.module.applicant.service.CaculateApplicantService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -14,6 +15,7 @@ public class ApplicantEventConsumer {
         this.caculateApplicantService = caculateApplicantService;
     }
 
+    @Async("eventTaskExecutor")
     @TransactionalEventListener
     public void handleEvent(ApplicantCreatedEvent event) {
         caculateApplicantService.caculateMatchScoreByApplicantId(event.getEventData().getId());
