@@ -158,13 +158,6 @@ public class CaculateApplicantServiceImpl implements CaculateApplicantService {
                 applicantScore.setSkill(response.getBody().getScores().get(ScoreResponseKey.SKILLS_SCORE.getValue()));
                 applicantScore.setApplicantId(applicant.getId());
 
-                if (applicantScore.getStructure() < 10) {
-                    double min = 14.04;
-                    double max = 18.05;
-                    double randomValue = min + (Math.random() * (max - min));
-                    applicantScore.setStructure(randomValue);
-                }
-
                 applicantScoreService.create(applicantScore);
                 applicantService.updateScore(applicant.getId(), applicantScore.getOverall());
             } else {
