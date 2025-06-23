@@ -26,6 +26,7 @@ public class Article implements Serializable {
     private Instant dueDate;
     private ArticleStatus status;
     private Boolean autoCaculate;
+    private String educationRequired;
     private Long companyId;
     private Company company;
     private List<Long> industryIds;

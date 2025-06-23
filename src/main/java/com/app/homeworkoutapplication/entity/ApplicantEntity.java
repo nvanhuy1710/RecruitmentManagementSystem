@@ -70,6 +70,9 @@ public class ApplicantEntity implements Serializable {
     @OneToMany(mappedBy = "applicant")
     private Set<DocumentEntity> documents = new HashSet<>();
 
+    @OneToMany(mappedBy = "applicant")
+    private Set<ApplicantScoreEntity> applicantScores = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

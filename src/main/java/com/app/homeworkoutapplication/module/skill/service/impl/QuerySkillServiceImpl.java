@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.LongFilter;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,18 @@ public class QuerySkillServiceImpl extends QueryService<SkillEntity> implements 
     public QuerySkillServiceImpl(SkillRepository skillRepository, SkillMapper skillMapper) {
         this.skillRepository = skillRepository;
         this.skillMapper = skillMapper;
+    }
+
+    @Override
+    public List<Skill> findListByArticleId(Long articleId) {
+        SkillCriteria criteria = new SkillCriteria();
+        LongFilter id = new LongFilter();
+
+        id.setEquals(articleId);
+
+        criteria.setArticleId(id);
+
+        return findListByCriteria(criteria);
     }
 
     public List<Skill> findListByCriteria(SkillCriteria criteria) {

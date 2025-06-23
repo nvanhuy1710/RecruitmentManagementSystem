@@ -12,5 +12,7 @@ import java.util.Map;
 public class MatchScore {
     private Boolean success;
 
-    private Map<Long, Double> results;
+    private Map<String, Double> scores;
+
+    private String error;
 }

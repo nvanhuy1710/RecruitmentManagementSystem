@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface QuerySkillService {
 
+    List<Skill> findListByArticleId(Long articleId);
+
     List<Skill> findListByCriteria(SkillCriteria criteria);
 
     Page<Skill> findPageByCriteria(SkillCriteria criteria, Pageable pageable);

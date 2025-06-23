@@ -5,6 +5,9 @@ import com.app.homeworkoutapplication.module.applicant.service.ApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.CaculateApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.QueryApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.criteria.ApplicantCriteria;
+import com.app.homeworkoutapplication.module.applicantscore.dto.ApplicantScore;
+import com.app.homeworkoutapplication.module.applicantscore.service.ApplicantScoreService;
+import com.app.homeworkoutapplication.module.applicantscore.service.QueryApplicantScoreService;
 import com.app.homeworkoutapplication.security.AuthorityConstant;
 import com.app.homeworkoutapplication.util.CurrentUserUtil;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -34,12 +37,14 @@ public class ApplicantController {
     private final ApplicantService applicantService;
     private final QueryApplicantService queryApplicantService;
     private final CaculateApplicantService caculateApplicantService;
+    private final QueryApplicantScoreService queryApplicantScoreService;
     private final CurrentUserUtil currentUserUtil;
 
-    public ApplicantController(ApplicantService applicantService, QueryApplicantService queryApplicantService, CaculateApplicantService caculateApplicantService, CurrentUserUtil currentUserUtil) {
+    public ApplicantController(ApplicantService applicantService, QueryApplicantService queryApplicantService, CaculateApplicantService caculateApplicantService, ApplicantScoreService applicantScoreService, QueryApplicantScoreService queryApplicantScoreService, CurrentUserUtil currentUserUtil) {
         this.applicantService = applicantService;
         this.queryApplicantService = queryApplicantService;
         this.caculateApplicantService = caculateApplicantService;
+        this.queryApplicantScoreService = queryApplicantScoreService;
         this.currentUserUtil = currentUserUtil;
     }
 
@@ -86,6 +91,18 @@ public class ApplicantController {
     public ResponseEntity<Applicant> getById(@PathVariable("id") Long id) {
         Applicant res = queryApplicantService.getById(id);
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/applicants/{id}/scores")
+    public ResponseEntity<ApplicantScore> getScore(@PathVariable("id") Long id) {
+        List<ApplicantScore> applicantScores = queryApplicantScoreService.findListByApplicantId(id);
+        return applicantScores.isEmpty() ? ResponseEntity.ok(null) : ResponseEntity.ok(applicantScores.get(0));
+    }
+
+    @PutMapping("/applicants/{id}/scores")
+    public ResponseEntity<Void> caculateScore(@PathVariable("id") Long id) {
+        caculateApplicantService.caculateMatchScoreByApplicantId(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/applicants/{id}/accept")

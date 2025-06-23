@@ -73,6 +73,9 @@ public class ArticleEntity implements Serializable {
     @Column(name = "auto_caculate")
     private Boolean autoCaculate;
 
+    @Column(name = "education_required")
+    private String educationRequired;
+
     @OneToMany(mappedBy = "article")
     private Set<ArticleIndustryEntity> industries = new HashSet<>();
 

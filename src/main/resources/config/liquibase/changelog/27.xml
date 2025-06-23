@@ -6,5 +6,32 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="27" author="nvhuy">
+        <addColumn tableName="article">
+            <column name="education_required" type="varchar(1000)" afterColumn="requirement"/>
+        </addColumn>
+
+        <createTable tableName="applicant_score">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="applicant_id" type="integer">
+                <constraints nullable="false" />
+            </column>
+            <column name="overall" type="float">
+                <constraints nullable="true" />
+            </column>
+            <column name="structure" type="float">
+                <constraints nullable="true" />
+            </column>
+            <column name="skill" type="float">
+                <constraints nullable="true" />
+            </column>
+            <column name="experience" type="float">
+                <constraints nullable="true" />
+            </column>
+            <column name="education" type="float">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>
