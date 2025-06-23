@@ -3,7 +3,9 @@ package com.app.homeworkoutapplication.module.applicant.service.impl;
 import com.app.homeworkoutapplication.entity.enumeration.ApplicantStatus;
 import com.app.homeworkoutapplication.entity.mapper.ApplicantMapper;
 import com.app.homeworkoutapplication.module.applicant.dto.Applicant;
+import com.app.homeworkoutapplication.module.applicant.dto.event.ApplicantAcceptEvent;
 import com.app.homeworkoutapplication.module.applicant.dto.event.ApplicantCreatedEvent;
+import com.app.homeworkoutapplication.module.applicant.dto.event.ApplicantRejectEvent;
 import com.app.homeworkoutapplication.module.applicant.service.ApplicantService;
 import com.app.homeworkoutapplication.module.applicant.service.QueryApplicantService;
 import com.app.homeworkoutapplication.module.document.dto.Document;
@@ -84,7 +86,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         Applicant applicant = queryApplicantService.getById(id);
         applicant.setStatus(ApplicantStatus.ACCEPTED);
         applicantRepository.save(applicantMapper.toEntity(applicant));
-        mailService.sendReviewApplicantResult(queryUserService.findById(applicant.getUserId()), ApplicantStatus.ACCEPTED);
+        applicationEventPublisher.publishEvent(new ApplicantAcceptEvent(this, applicant));
     }
 
     @Override
@@ -92,7 +94,7 @@ public class ApplicantServiceImpl implements ApplicantService {
         Applicant applicant = queryApplicantService.getById(id);
         applicant.setStatus(ApplicantStatus.DECLINED);
         applicantRepository.save(applicantMapper.toEntity(applicant));
-        mailService.sendReviewApplicantResult(queryUserService.findById(applicant.getUserId()), ApplicantStatus.DECLINED);
+        applicationEventPublisher.publishEvent(new ApplicantRejectEvent(this, applicant));
     }
 
     @Override
